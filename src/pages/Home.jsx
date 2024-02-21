@@ -42,7 +42,6 @@ const Home = ({ navigate }) => {
           borderRadius: '5px',
           background: 'transparent',
           fontSize: '16px',
-          color: 'black',
           padding: '10px 20px',
           transition: 'color 0.3s, background 0.3s',
           backgroundColor: hovered ? 'blue' : 'transparent',
