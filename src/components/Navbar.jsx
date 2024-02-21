@@ -108,7 +108,7 @@ function Navbar() {
     color: 'black',
     padding: '10px 20px',
   }}
-  onClick={() => window.open("https://mdpuneethreddy.com", '_blank', 'noopener')}
+  onClick={() => window.open("https://blog.mdpuneethreddy.com", '_blank', 'noopener')}
 >
   Blog
 </button>
