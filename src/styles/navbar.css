@@ -1,0 +1,25 @@
+.name-container {
+    margin-right: auto;
+  }
+  
+  .navbar-list {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 10px; 
+  }
+  
+  .menu-icon {
+    display: none; 
+  }
+  
+
+  @media (max-width: 768px) {
+    .navbar-list {
+      display: none; 
+    }
+  
+    .menu-icon {
+      display: block; 
+    }
+  }
+  
