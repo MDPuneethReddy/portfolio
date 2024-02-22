@@ -36,7 +36,7 @@ const Contact = () => {
   return (
     <div id="contact" style={{ padding: '20px', textAlign: 'center', color: 'black' }}>
       <Typography variant="h2" gutterBottom>
-        Contact
+        Contact Me
       </Typography>
       <div style={{ borderBottom: '2px solid black', paddingBottom: '15px', width: '50%', margin: '0 auto', marginBottom: '15px' ,color:"black"}}></div>
       <form onSubmit={handleSubmit} style={{ maxWidth: '50%', margin: '0 auto' }}>
