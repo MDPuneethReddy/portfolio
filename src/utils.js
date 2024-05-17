@@ -17,10 +17,18 @@ export const skills = [
   {name:"RabbitMQ",rating:8}
 ];
 export const experiences = [
+  {
+    title: 'Research Intern',
+    company: 'Florida state University',
+    date: 'May 2024 - present',
+    description: [
+      "I develop user-friendly web applications with ReactJS and FastAPI, contributing to a seamless and intuitive user experience. Additionally, I've effectively Dockerized web components, enhancing their scalability and streamlining deployment processes. These applications have been successfully deployed on Nvidia GPUs, further optimizing performance. For logging, we utilize Prometheus and Grafana, enabling comprehensive monitoring and analysis of system performance. I also contribute to the design and development processes using Figma, ensuring visually cohesive and user-centric interfaces."
+    ]
+  },
     {
       title: 'Graduate Research Assistant- Automated Software Developer',
       company: 'Florida state University',
-      date: 'Aug 2023 - Present',
+      date: 'Aug 2023 - May 2024',
       description: [
         "I develop user-friendly web applications with ReactJS and FastAPI, contributing to a seamless and intuitive user experience. Additionally, I've effectively Dockerized web components, enhancing their scalability and streamlining deployment processes. These applications have been successfully deployed on Nvidia GPUs, further optimizing performance. For logging, we utilize Prometheus and Grafana, enabling comprehensive monitoring and analysis of system performance. I also contribute to the design and development processes using Figma, ensuring visually cohesive and user-centric interfaces."
       ]
@@ -52,6 +60,20 @@ export const experiences = [
   ];
 
 export const projects = [
+  {
+    title: 'ReviewZ',
+    image: './assets/Reviewz.png',
+    githubLink: 'https://github.com/yashasgowda11/Reviewz',
+    description: "Movie Review application",
+    techStack:["ReactNative","Figma","UI/UX","D3"]
+  },
+  {
+    title: 'Diexperts1',
+    image: './assets/diexperts1.png',
+    githubLink: 'https://diexperts1.com/',
+    description: "Diexperts1 Application",
+    techStack:["Reactjs","Figma","UI/UX","tailwindCSS","NextUI","FormSpree"]
+  },
     {
       title: 'Expense Analyser',
       image: './assets/Expense Anlayser.png',
