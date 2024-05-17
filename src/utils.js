@@ -71,7 +71,7 @@ export const projects = [
     title: 'Diexperts1',
     image: './assets/diexperts1.png',
     githubLink: 'https://diexperts1.com/',
-    description: "Diexperts1 Application",
+    description: "Created an web application for Diexperts1 company",
     techStack:["Reactjs","Figma","UI/UX","tailwindCSS","NextUI","FormSpree"]
   },
     {
