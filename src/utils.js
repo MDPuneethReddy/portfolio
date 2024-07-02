@@ -157,6 +157,12 @@ export const projects = [
 
   export const certifications = [
     {
+      title: "AWS Certified Cloud Practitioner",
+      image:"./assets/AWS cloud practitioner.png",
+      link:"https://cp.certmetrics.com/amazon/en/public/verify/credential/00c325265ff84d4398ec6e838aeb38c9"
+
+    },
+    {
       title: 'Infosys Certified Software Programmer',
       image: './assets/infosys.png',
       link: 'https://drive.google.com/file/d/1YuG11JnbD078j6kIM4vgjaRTTNCEdqg0/view?usp=sharing',
