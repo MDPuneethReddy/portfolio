@@ -1,24 +1,63 @@
+import { FaReact } from "react-icons/fa";
+import { FaNode } from "react-icons/fa";
+import { FaJava } from "react-icons/fa";
+import { FaPython } from "react-icons/fa";
+import { IoLogoJavascript } from "react-icons/io";
+import { RiNextjsFill } from "react-icons/ri";
+import { SiFlask } from "react-icons/si";
+import { SiFastapi } from "react-icons/si";
+import { FaDocker } from "react-icons/fa";
+import { SiCypress } from "react-icons/si";
+import { SiMysql } from "react-icons/si";
+import { DiMongodb } from "react-icons/di";
+import { BiLogoPostgresql } from "react-icons/bi";
+import { SiRabbitmq } from "react-icons/si";
+import { FaGit } from "react-icons/fa";
+import { SiExpress } from "react-icons/si";
+import { GrGraphQl } from "react-icons/gr";
+import { FaFigma } from "react-icons/fa";
+import { FaHtml5 } from "react-icons/fa";
+import { IoLogoCss3 } from "react-icons/io5";
+import { SiTypescript } from "react-icons/si";
+import { SiSpring } from "react-icons/si";
+import { SiJest } from "react-icons/si";
+import { SiHibernate } from "react-icons/si";
+
+
 export const pages = [ 'home','About','experience','projects','certification', 'contact'];
 
+const size=30
 export const skills = [
-  { name: 'JavaScript', rating: 8 },
-  {name:'Python',rating: 8},
-  {name: 'Java', rating: 7},
-  {name: 'Reactjs', rating:8},
-  {name: 'Nextjs', rating:6},
-  {name: 'Nodejs',rating: 8},
-  {name: "Flask",rating:5},
-  {name: 'FastAPI',rating:6},
-  {name:'Docker', rating:5},
-  {name:'Cypress', rating:7},
-  {name:'MySQL', rating:8},
-  {name:"Mongodb",rating:7},
-  {name:"PostgreSQL",rating: 8},
-  {name:"RabbitMQ",rating:8}
+  { name: 'JavaScript', rating: 8,icon:<IoLogoJavascript size={size} />  },
+  {name:'Python',rating: 8,icon:<FaPython size={size} />  },
+  {name:"TypeScript",rating:8,icon:<SiTypescript size={size}/>  },
+  {name: 'Java', rating: 7,icon:<FaJava size={size}/>},
+  {name: 'Reactjs', rating:8,icon:<FaReact size={size} />},
+  {name: 'Nextjs', rating:6,icon:<RiNextjsFill size={size}/>  },
+  {name: 'Nodejs',rating: 8,icon:<FaNode size={size} />},
+  {name: "Flask",rating:5,icon:<SiFlask size={size}/>  },
+  {name: 'FastAPI',rating:6,icon:<SiFastapi size={size}/>  },
+  {name:'Docker', rating:5,icon:<FaDocker size={size}/>  },
+  {name:'Cypress', rating:7,icon:<SiCypress size={size}/>  },
+  {name:'MySQL', rating:8,icon:<SiMysql size={size}/>  },
+  {name:"Mongodb",rating:7,icon:<DiMongodb size={size}/>  },
+  {name:"PostgreSQL",rating: 8,icon:<BiLogoPostgresql size={size}/>  },
+  {name:"RabbitMQ",rating:8,icon:<SiRabbitmq size={size}/>  },
+  {name:"Git",rating:8,icon:<FaGit size={size}/>  },
+  {name:"ExpressJS",rating:8,icon:<SiExpress size={size}/>  },
+  {name:"GraphQL",rating:8,icon:<GrGraphQl size={size}/>  },
+  {name:"Figma",rating:8,icon:<FaFigma size={size}/>  },
+  {name:"HTML",rating:8,icon:<FaHtml5 size={size}/>},
+  {name:"CSS",rating:8,icon:<IoLogoCss3 size={size}/>  },
+  {name:"SpringBoot",rating:5,icon:<SiSpring  size={size}/>  },
+  {name:"Jest",rating:8,icon:<SiJest size={size}/>  },
+  {name:"Hibernate",rating:8,icon:<SiHibernate size={size}/>
+  }
+  
 ];
 export const experiences = [
   {
-    title: 'Research Intern',
+    title: 'Software Developer Intern',
     company: 'Florida state University',
     date: 'May 2024 - present',
     description: [
@@ -66,6 +105,13 @@ export const projects = [
     githubLink: 'https://github.com/yashasgowda11/Reviewz',
     description: "Movie Review application",
     techStack:["ReactNative","Figma","UI/UX","D3"]
+  },
+  {
+    title: 'Covid19 impact on US stocks',
+    image: './assets/stocks.png',
+    githubLink: 'https://github.com/MDPuneethReddy/covid_impact_on_USA_stocks',
+    description: "Covid impact on USA stock market",
+    techStack: ["pandas","numpy","scikit-learn"]
   },
   {
     title: 'Diexperts1',
@@ -122,13 +168,6 @@ export const projects = [
         githubLink: 'https://github.com/MDPuneethReddy/cpdp_multithread_calculator',
         description: "Calculator with heavy calculations",
         techStack:["Reactjs","MaterialUI","RabbitMQ"]
-      },
-      {
-        title: 'Covid19 impact on US stocks',
-        image: './assets/stocks.png',
-        githubLink: 'https://github.com/MDPuneethReddy/covid_impact_on_USA_stocks',
-        description: "Covid impact on USA stock market",
-        techStack: ["pandas","numpy","scikit-learn"]
       }
   ];
 

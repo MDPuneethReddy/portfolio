@@ -27,12 +27,13 @@ const Home = ({ navigate }) => {
       paddingTop: '30vh',
       position: 'relative',
       overflow: 'hidden',
-      backgroundColor: '#003366',
+      // backgroundColor: '#003366',
+      backgroundImage:'url("./assets/IMG_2218.png")',
       width: '100%',
       minHeight: '100vh',
     }}>
 
-      <h1 style={{color:"white"}}>Hello, I'm <span style={{ color: '#009688' }}>Puneeth Reddy</span>,</h1>
+      <h1 style={{color:"white"}}>Hello, I'm <span style={{ color: 'black' }}>Puneeth Reddy</span>,</h1>
       <h1 style={{color: "white"}}>I'm a full-stack web developer</h1>
       <p>
       <button

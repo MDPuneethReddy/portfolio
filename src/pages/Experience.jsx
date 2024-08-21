@@ -1,55 +1,60 @@
 import React from 'react';
-import { Container, Typography,  List, ListItem, ListItemText, Grid, Paper } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'; 
-import { frontendskills,backendskills } from '../utils';
-
+import { Container, Typography, Grid, Paper, Box } from '@mui/material';
+import { skills } from '../utils';
 
 const Experience = () => {
-  
-
   return (
-    <div id="experience" style={{backgroundColor:""}}>
-    <Container maxWidth="lg">
-    <Typography variant="h2" gutterBottom sx={{ textAlign: 'center' }}>
-        Experience
-      </Typography>
-      <div style={{ borderBottom: '2px solid black',paddingBottom:"0px", width: '50%', margin: '0 auto', marginBottom: '20px' }}></div>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ padding: 3, borderRadius: 2, backgroundColor: 'teal' }}>
-            <Typography variant="h5" gutterBottom>
-              Frontend Development & Project Management
-            </Typography>
-            <List>
-              {frontendskills.map((skill, index) => (
-                <ListItem key={index}>
-                  <CheckCircleIcon sx={{ marginRight: 1 }} /> 
-                  <ListItemText primary={skill.name} secondary={skill.proficiency} />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ padding: 3, borderRadius: 2, backgroundColor: 'teal' }}>
-            <Typography variant="h5" gutterBottom>
-              Backend Development & Other Tools
-            </Typography>
-            <List>
-              {backendskills.map((skill, index) => (
-                <ListItem key={index}>
-                  <CheckCircleIcon sx={{ marginRight: 1 }} /> 
-                  <ListItemText primary={skill.name} secondary={skill.proficiency} />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Container>
+    <div id="experience" style={{ paddingTop: '40px', paddingBottom: '40px', backgroundColor: '#f5f5f5' }}>
+      <Container maxWidth="lg">
+        <Paper
+          elevation={4}
+          sx={{
+            borderRadius: 4,
+            padding: 4,
+            border: '1px solid #ddd',
+            backgroundColor: '#ffffff',
+          }}
+        >
+          <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', fontWeight: 'bold', marginBottom: 4 }}>
+            Skills
+          </Typography>
+          <Grid container spacing={3}>
+            {skills.map((skill, index) => (
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                key={index}
+              >
+                <Paper
+                  elevation={2}
+                  sx={{
+                    padding: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100%',
+                    borderRadius: 2,
+                    backgroundColor: '#f9f9f9',
+                  }}
+                >
+                  <Box sx={{ fontSize: 50, marginBottom: 1 }}>
+                    {skill.icon}
+                  </Box>
+                  <Typography variant="h6" sx={{ textAlign: 'center' }}>
+                    {skill.name}
+                  </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
+      </Container>
     </div>
   );
 };
 
-export  {Experience};
+export { Experience };

@@ -19,7 +19,7 @@ const About = () => {
       <Grid item xs={12} md={8} textAlign="center">
   <Avatar
     alt="Your Name"
-    src="./assets/DSC04314.JPG"
+    src="./assets/puneeth.JPG"
     
     sx={{
       width: isSmallScreen ? theme.spacing(20) : theme.spacing(30),
