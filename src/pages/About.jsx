@@ -35,7 +35,7 @@ const About = () => {
           <Typography variant="h5" gutterBottom style={{ textAlign: 'center' }}>
   <LightbulbIcon />
   <h2 style={{ margin: '0', padding: '0', fontSize:"18px" }}>Experience</h2>
-  <p style={{ margin: '10px', padding: '10px',fontSize:"15px" }}>2.5 years</p>
+  <p style={{ margin: '10px', padding: '10px',fontSize:"15px" }}>3.5 years</p>
   <p style={{ margin: '0', padding: '0',fontSize:"15px" }}>Full Stack Software Development</p>
 </Typography>
           </Paper>
