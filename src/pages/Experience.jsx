@@ -25,7 +25,7 @@ const Experience = () => {
                 xs={12}
                 sm={6}
                 md={4}
-                lg={3}
+                lg={2.4}
                 key={index}
               >
                 <Paper
@@ -44,7 +44,7 @@ const Experience = () => {
                   <Box sx={{ fontSize: 50, marginBottom: 1 }}>
                     {skill.icon}
                   </Box>
-                  <Typography variant="h6" sx={{ textAlign: 'center' }}>
+                  <Typography variant="h10" sx={{ textAlign: 'center' }}>
                     {skill.name}
                   </Typography>
                 </Paper>

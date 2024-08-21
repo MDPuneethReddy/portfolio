@@ -22,6 +22,8 @@ import { SiTypescript } from "react-icons/si";
 import { SiSpring } from "react-icons/si";
 import { SiJest } from "react-icons/si";
 import { SiHibernate } from "react-icons/si";
+import { FaJenkins } from "react-icons/fa";
+
 
 
 export const pages = [ 'home','About','experience','projects','certification', 'contact'];
@@ -51,8 +53,8 @@ export const skills = [
   {name:"CSS",rating:8,icon:<IoLogoCss3 size={size}/>  },
   {name:"SpringBoot",rating:5,icon:<SiSpring  size={size}/>  },
   {name:"Jest",rating:8,icon:<SiJest size={size}/>  },
-  {name:"Hibernate",rating:8,icon:<SiHibernate size={size}/>
-  }
+  {name:"Hibernate",rating:8,icon:<SiHibernate size={size}/>},
+  {name:"Jenkins",rating:8,icon:<FaJenkins size={size} />}
   
 ];
 export const experiences = [
