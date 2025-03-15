@@ -27,7 +27,7 @@ const Contact = () => {
   };
 
   return (
-    <Div100vh className="flex items-center justify-center text-center w-full animated-bg">
+    <Div100vh id="contact" className="flex items-center justify-center text-center w-full animated-bg">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

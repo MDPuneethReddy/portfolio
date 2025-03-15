@@ -6,7 +6,7 @@ import { Link  } from "react-scroll";
 
 function Home() {
   return (
-    <Div100vh className="flex items-center justify-center text-center w-full animated-bg">
+    <Div100vh id="home" className="flex items-center justify-center text-center w-full animated-bg">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

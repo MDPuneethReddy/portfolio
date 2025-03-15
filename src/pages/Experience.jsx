@@ -6,7 +6,7 @@ import { skills } from "../utils";
 const Experience = () => {
   return (
     <div
-      id="skills"
+      id="experience"
       style={{
         background: "linear-gradient(135deg, #1E1E1E, #282828)",
         minHeight: "90vh",
