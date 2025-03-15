@@ -26,7 +26,10 @@ import { FaJenkins } from "react-icons/fa";
 
 
 
-export const pages = [ 'home','About','experience','projects','certification', 'contact'];
+export const pages = [ 'home','About','experience','projects',
+  // 'certification'
+  // , 
+  'contact'];
 
 const size=30
 export const skills = [
@@ -119,7 +122,7 @@ export const projects = [
     title: 'Diexperts1',
     image: './assets/diexperts1.png',
     githubLink: 'https://diexperts1.com/',
-    description: "Created an web application for Diexperts1 company",
+    description: "Created an website for Diexperts1 company",
     techStack:["Reactjs","Figma","UI/UX","tailwindCSS","NextUI","FormSpree"]
   },
     {
@@ -129,34 +132,34 @@ export const projects = [
       description: "Analyze expenses application",
       techStack:["Nodejs","Reactjs","Firebase","Redux","Expressjs","D3"]
     },
-    {
-      title: 'Fetch Index Pages',
-      image: './assets/fetch.png',
-      githubLink: 'https://github.com/MDPuneethReddy/GetIndexPages',
-      description: "Fetching index pages for URL",
-      techStack:["puppeteer","Reactjs","WebSockets","Nodejs","AntD"]
-    },
-    {
-        title: 'Diabetes Prediction',
-        image: './assets/diabetes.png',
-        githubLink: 'https://github.com/MDPuneethReddy/diabetesprediction-flask',
-        description: "Predicting diabetes Application",
-        techStack: ["Flask","python","numpy","pandas","scikit-learn"]
-      },
-      {
-        title: 'Tech blog',
-        image: './assets/puneethreddy.png',
-        githubLink: 'https://github.com/MDPuneethReddy/personalblog',
-        description: "Personal Tech Blog",
-        techStack:["Nextjs","Firebase","AntD"]
-      },
-      {
-        title: 'Authentication System',
-        image: './assets/authentication.png',
-        githubLink: 'https://github.com/MDPuneethReddy/twoWayAuthentication_nodemailer_reactjs',
-        description: "Simple Authentication System",
-        techStack:["Reactjs","Firebase","nodemailer"]
-      },
+    // {
+    //   title: 'Fetch Index Pages',
+    //   image: './assets/fetch.png',
+    //   githubLink: 'https://github.com/MDPuneethReddy/GetIndexPages',
+    //   description: "Fetching index pages for URL",
+    //   techStack:["puppeteer","Reactjs","WebSockets","Nodejs","AntD"]
+    // },
+    // {
+    //     title: 'Diabetes Prediction',
+    //     image: './assets/diabetes.png',
+    //     githubLink: 'https://github.com/MDPuneethReddy/diabetesprediction-flask',
+    //     description: "Predicting diabetes Application",
+    //     techStack: ["Flask","python","numpy","pandas","scikit-learn"]
+    //   },
+    //   {
+    //     title: 'Tech blog',
+    //     image: './assets/puneethreddy.png',
+    //     githubLink: 'https://github.com/MDPuneethReddy/personalblog',
+    //     description: "Personal Tech Blog",
+    //     techStack:["Nextjs","Firebase","AntD"]
+    //   },
+    //   {
+    //     title: 'Authentication System',
+    //     image: './assets/authentication.png',
+    //     githubLink: 'https://github.com/MDPuneethReddy/twoWayAuthentication_nodemailer_reactjs',
+    //     description: "Simple Authentication System",
+    //     techStack:["Reactjs","Firebase","nodemailer"]
+    //   },
       {
         title: 'Covid Tracker',
         image: './assets/covid.png',
