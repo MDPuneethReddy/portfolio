@@ -9,7 +9,7 @@ const sectionLines = {
   about: ['That ID card is real. Well, the info is. Give it a swing!', 'Flip it over for the fine print.'],
   experience: ['These are my seasons. Novartis and FSU were binge-worthy. 🍿', 'Click a card to see every episode of that job.'],
   projects: ['Hover a title for a preview, click for the full episode!', 'Everything here is real, shipped code. Go peek on GitHub.'],
-  skills: ['My toolkit. Yes, I genuinely enjoy RabbitMQ.', 'Full stack means full stack — UI to infra.'],
+  skills: ['My toolkit. The AI row is where the fun is lately.', 'Full stack means full stack — UI to infra.'],
   education: ['Two degrees, zero regrets. Mostly.', 'Florida State and VIT shaped how I build.'],
   certifications: ['Certified — and certifiably curious.'],
   contact: ["Don't leave on a cliffhanger — say hi! 👋", 'I reply faster than a Netflix autoplay countdown.'],

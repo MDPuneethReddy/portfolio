@@ -35,7 +35,7 @@ const asDetail = {
   project: (x) => ({ id: x.id, kind: 'F I L M', title: x.title, description: x.description, tags: x.tech, art: x.art, genre: x.genre, link: x.link, linkLabel: x.linkLabel || 'View on GitHub' }),
 }
 
-const STACK = ['React', 'Node.js', 'Python', 'FastAPI', 'TypeScript', 'GraphQL', 'PostgreSQL', 'Docker', 'RabbitMQ', 'Redis', 'AWS', 'Next.js']
+const STACK = ['React', 'Next.js', 'FastAPI', 'Python', 'TypeScript', 'LangChain', 'RAG', 'Claude Code', 'PostgreSQL', 'Celery', 'Redis', 'AWS']
 
 export default function App() {
   const stored = readStoredProfile()

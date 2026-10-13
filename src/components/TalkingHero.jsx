@@ -22,7 +22,7 @@ export default function TalkingHero({ profile, onStory }) {
           <motion.span className="outline" initial={{ y: '100%' }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.1, ease: [0.2, 0.8, 0.2, 1] }}>Reddy</motion.span>
         </h1>
         <motion.p className="th-role" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-          {person.role}. {profile.tagline}
+          {person.role} · {person.focus}. {profile.tagline}
         </motion.p>
         <motion.div className="th-actions" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
           <button className="btn btn-play" onClick={() => onStory(0)}><FaPlay /> Watch my story</button>

@@ -71,7 +71,6 @@ export default function IdCard() {
   useMotionValueEvent(y, 'change', updateStrap)
 
   const uni = education[0]
-  const years = new Date().getFullYear() - 2019
 
   return (
     <div className="idc-stage">
@@ -105,7 +104,7 @@ export default function IdCard() {
             <div className="idc-role">{person.role}</div>
             <dl className="idc-fields">
               <div><dt>ID</dt><dd>{person.idNumber}</dd></div>
-              <div><dt>Since</dt><dd>2019</dd></div>
+              <div><dt>Since</dt><dd>{person.since}</dd></div>
               <div><dt>Clearance</dt><dd>Full stack</dd></div>
             </dl>
             <Barcode seed={person.idNumber} />
@@ -117,7 +116,7 @@ export default function IdCard() {
             <dl className="idc-list">
               <div><dt>Based in</dt><dd>{person.location}</dd></div>
               <div><dt>Education</dt><dd>{uni.title}, {uni.school}</dd></div>
-              <div><dt>Experience</dt><dd>{years}+ years · {experiences.length} roles</dd></div>
+              <div><dt>Experience</dt><dd>{person.idExperience} years · {experiences.length} roles</dd></div>
               <div><dt>Shipped</dt><dd>{projects.length} projects · {skills.length} tools</dd></div>
               <div><dt>Contact</dt><dd>{person.email}</dd></div>
               <div><dt>Status</dt><dd><span className="live" /> Open to opportunities</dd></div>

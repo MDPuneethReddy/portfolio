@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import IdCard from './IdCard'
 import { RevealTitle } from './Reveal'
-import { person, projects, skills } from '../data'
+import { person, skills } from '../data'
 
 function Count({ to, suffix = '', prefix = '' }) {
   const ref = useRef(null)
@@ -24,7 +24,7 @@ function Count({ to, suffix = '', prefix = '' }) {
 }
 
 export default function About() {
-  const years = new Date().getFullYear() - 2019
+  const years = new Date().getFullYear() - person.since
   return (
     <section id="about" className="about">
       <IdCard />
@@ -32,18 +32,20 @@ export default function About() {
         <p className="kicker">Who's this?</p>
         <RevealTitle>I build the whole thing, from the button you click to the queue behind it.</RevealTitle>
         <p>
-          I'm a full-stack engineer who started shipping in 2019. At Novartis I built GraphQL APIs, RabbitMQ
-          microservices and secure data tools, and led a tooling change that cut spend by 20%. At Florida State
-          University I build React and FastAPI apps that run on NVIDIA GPUs, with Prometheus and Grafana watching them.
+          I'm a full-stack engineer and a core contributor to Magellon, an open-source scientific data platform used
+          by research teams in 3 countries. I've shipped systems that process millions of records a day, and LLM
+          features now used by 5+ research institutions.
         </p>
         <p>
-          I care about fast interfaces, boring reliable backends, and tests that catch things before users do.
+          Before that I spent over two years at Novartis building data platforms: Git-style versioning for
+          relational data, APIs 35% faster, and 75% fewer production bugs. These days Claude Code is my daily pair
+          programmer. I direct, review and own the architecture, and ship faster because of it.
         </p>
         <dl className="stats">
           <div><dt>Years shipping</dt><dd><Count to={years} suffix="+" /></dd></div>
-          <div><dt>Projects</dt><dd><Count to={projects.length} /></dd></div>
+          <div><dt>Countries using my work</dt><dd><Count to={3} /></dd></div>
           <div><dt>Tools in the kit</dt><dd><Count to={skills.length} /></dd></div>
-          <div><dt>Spend cut at Novartis</dt><dd><Count to={20} prefix="−" suffix="%" /></dd></div>
+          <div><dt>Pipeline throughput</dt><dd><Count to={3} suffix="×" /></dd></div>
         </dl>
         <a className="btn btn-light" href={person.resume} target="_blank" rel="noreferrer">Download résumé</a>
       </motion.div>
