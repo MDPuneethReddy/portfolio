@@ -57,7 +57,7 @@ so a blocked site doesn't fail silently.
 | Pokémon Center | Homepage redirects to a waiting room, or the page shows waiting-room or "high traffic" text | Needs a home IP |
 | Costco | Costco's public Queue-it config (`assets.queue-it.net/costco/...`) lists no queues normally and gains one when a queue is set up | Often fires before the queue opens; works from anywhere |
 | Sam's Club | Redirect to queue-it.net or waiting-room text | Needs a home IP |
-| Walmart drawing | Hip2Save's running "Walmart Drawing" post ("Enter Today's Walmart Drawing at 5PM ET…") | Walmart's own drawing page blocks cloud IPs. Add its URL in `config.toml` when running at home. |
+| Walmart drawing | Walmart's drawing page (`walmart.com/shop/collectibles/draw`) lists each item as "Drawing starts Oct 14, 2:00pm PDT". Alerts name the Pokémon items. | Hip2Save's "Walmart Drawing" post is a backup source. |
 | Target drawing | TrackaLacker's Target drawing news page | Target hasn't officially launched drawings yet. Add better sources to `config.toml` as they appear. |
 
 To add a source, add an `[[announcement_sources]]` block with a URL and

@@ -54,6 +54,17 @@ skip_in_ci = true
 # `open_url` is the page the alert links to (where you actually enter).
 # --------------------------------------------------------------------------
 
+# Walmart's own drawing page lists every upcoming item as
+# "<product> Drawing starts Oct 14, 2:00pm PDT". Only Pokémon items are kept.
+[[announcement_sources]]
+name = "Walmart drawing page"
+retailer = "Walmart"
+label = "drawing"
+url = "https://www.walmart.com/shop/collectibles/draw"
+item_regex = 'current price \$[\d.,]+ (?P<item>.{5,250}?) Drawing starts\W+(?P<when>.{0,30}?(?:am|pm)\s*[A-Z]{2,3})'
+item_keywords = ["pokemon", "pokémon"]
+
+# Backup source in case Walmart's page blocks the watcher.
 [[announcement_sources]]
 name = "Hip2Save Walmart drawing post"
 retailer = "Walmart"
@@ -70,14 +81,3 @@ label = "drawing"
 url = "https://www.trackalacker.com/articles/news/target-drawing-system"
 open_url = "https://www.target.com/"
 keywords = ["drawing", "raffle", "pokémon", "pokemon"]
-
-# Walmart's own Collectibles Drawing page blocks datacenter IPs (GitHub
-# Actions), but usually works from a home connection. Paste its URL and
-# enable this when running locally.
-[[announcement_sources]]
-enabled = false
-name = "Walmart Collectibles Drawing page"
-retailer = "Walmart"
-label = "drawing"
-url = "https://www.walmart.com/REPLACE-WITH-DRAWING-PAGE"
-keywords = ["drawing", "entry", "enter"]

@@ -52,6 +52,7 @@ USER_AGENT = (
 DEFAULT_QUEUE_URL_PATTERNS = [
     r"^https?://[^/]*queue-it\.net",
     r"[?&/](?:queue|waitingroom|waiting-room)\b",
+    r"/waiting-hallway\b",  # Walmart's waiting room path
 ]
 
 # Matched against headers + body, case-insensitive. Don't add bare "queue-it"
@@ -172,6 +173,34 @@ def fmt_delta(delta: timedelta) -> str:
 class FoundTime:
     start: datetime
     snippet: str
+    items: list[str] = field(default_factory=list)
+
+
+def extract_items(text: str, item_regex: str, item_keywords: list[str], default_tz: str,
+                  now: datetime | None = None) -> list[FoundTime]:
+    """Per-product listings, e.g. Walmart's "<product> Drawing starts Oct 14, 2:00pm PDT".
+
+    ``item_regex`` needs named groups ``item`` and ``when``. Items are grouped
+    by start time; only items containing one of ``item_keywords`` are kept.
+    """
+    kw = [k.lower() for k in item_keywords]
+    groups: dict[datetime, list[str]] = {}
+    for m in re.finditer(item_regex, text, re.I | re.S):
+        item = re.sub(r"\s*\d(?:\.\d)? out of 5 stars.*$", "", m.group("item")).strip()
+        item = re.sub(r"^Collectible\s+", "", item)
+        if kw and not any(k in item.lower() for k in kw):
+            continue
+        for f in extract_start_times(m.group("when"), [], default_tz, now):
+            if item not in groups.setdefault(f.start, []):
+                groups[f.start].append(item)
+    return [FoundTime(start, "; ".join(items), items) for start, items in sorted(groups.items())]
+
+
+def summarize_items(items: list[str], limit: int = 3) -> str:
+    if not items:
+        return ""
+    shown = ", ".join(items[:limit])
+    return shown + (f" +{len(items) - limit} more" if len(items) > limit else "")
 
 
 def _infer_year(month: int, day: int, hour: int, minute: int, tz: ZoneInfo, now: datetime) -> datetime | None:
@@ -599,9 +628,11 @@ class Watcher:
         text = trim_text(html_to_text(page.body), src.get("start_after"), src.get("stop_at"))
         now = now_utc()
         window = timedelta(minutes=self.config.get("entry_window_minutes", 60))
-        found = extract_start_times(
-            text, src.get("keywords", []), src.get("default_timezone", "America/New_York"), now
-        )
+        tz = src.get("default_timezone", "America/New_York")
+        if src.get("item_regex"):
+            found = extract_items(text, src["item_regex"], src.get("item_keywords", []), tz, now)
+        else:
+            found = extract_start_times(text, src.get("keywords", []), tz, now)
         horizon = now + timedelta(days=self.config.get("max_days_ahead", 45))
         upcoming = [f for f in found if now - window < f.start < horizon]
         print(f"[drawing] {src['name']}: {len(found)} times on page, {len(upcoming)} upcoming")
@@ -612,6 +643,11 @@ class Watcher:
         retailer = src.get("retailer", src["name"])
         eid = hashlib.sha1(f"{retailer}|{iso(f.start)}".encode()).hexdigest()[:12]
         if eid in self.state["events"]:
+            ev = self.state["events"][eid]
+            new = [i for i in f.items if i not in ev.get("items", [])]
+            if new:
+                ev["items"] = ev.get("items", []) + new
+                self.record("event_items", f"{retailer} {ev['label']}: added {summarize_items(new, 10)}")
             return
         now = now_utc()
         label = src.get("label", "drawing")
@@ -620,7 +656,7 @@ class Watcher:
         ev = {
             "retailer": retailer, "label": label, "source": src["name"],
             "url": src.get("open_url", src["url"]), "start": iso(f.start),
-            "found_at": iso(now), "snippet": f.snippet[:400],
+            "found_at": iso(now), "snippet": f.snippet[:400], "items": f.items,
             "sent": [], "scheduled": {},
         }
         # Reminders whose time already passed are covered by the announcement below.
@@ -633,10 +669,11 @@ class Watcher:
             msg = f"Opened {when}. Window closes around {fmt_when(f.start + window, self.zones[:1])}."
             self.notify(f"{retailer} {label} is OPEN", msg, url=ev["url"], priority=5, tags=["tickets"])
             return
+        detail = ("Items: " + summarize_items(f.items, 8)) if f.items else f"“{f.snippet[:200]}”"
         self.notify(
             f"{retailer} {label} announced",
             f"Opens {when} (in {fmt_delta(f.start - now)}). Entry window ~{int(window.total_seconds() // 60)} min.\n"
-            f"“{f.snippet[:200]}”",
+            + detail,
             url=ev["url"], priority=4, tags=["calendar"],
         )
         # Hand future reminders to notifiers that can deliver them on time.
@@ -660,11 +697,13 @@ class Watcher:
         start = parse_iso(ev["start"])
         window = timedelta(minutes=self.config.get("entry_window_minutes", 60))
         name = f"{ev['retailer']} {ev['label']}"
+        items = summarize_items(ev.get("items", []))
+        items = f"\n{items}" if items else ""
         if offset == 0:
             return (f"{name} is OPEN", f"Enter now — closes around "
-                    f"{fmt_when(start + window, self.zones[:1])}.", 5)
+                    f"{fmt_when(start + window, self.zones[:1])}.{items}", 5)
         return (f"{name} in {fmt_delta(timedelta(minutes=offset))}",
-                f"Opens {fmt_when(start, self.zones)}. Have your login, address and card ready.", 4)
+                f"Opens {fmt_when(start, self.zones)}. Have your login, address and card ready.{items}", 4)
 
     def send_due_reminders(self) -> None:
         now = now_utc()

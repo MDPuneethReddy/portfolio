@@ -41,6 +41,23 @@ class ExtractTimes(unittest.TestCase):
         self.assertEqual(self.times("Drawing October 20, 10 amazing prizes"), [])
 
 
+class ExtractItems(unittest.TestCase):
+    def test_walmart_listing(self):
+        import tomllib
+        src = next(x for x in tomllib.load(open("config.toml", "rb"))["announcement_sources"]
+                   if x["name"] == "Walmart drawing page")
+        text = ("Upcoming drawings View all $ 49 97 current price $49.97 Collectible 2026 Topps Neon Marvel "
+                "Mega Box Drawing starts Oct 14, 2:00pm PDT $ 69 00 current price $69.00 Collectible Pokemon "
+                "Trading Card Game Prismatic Evolutions Elite Trainer Box 4.7 out of 5 stars 684 4.7 out of 5 "
+                "Stars. 684 reviews Drawing starts Oct 14, 2:00pm PDT $ 34 98 current price $34.98 Pokémon TCG: "
+                "Knock Out Collection Drawing starts Oct 21, 2:00pm PDT")
+        got = d.extract_items(text, src["item_regex"], src["item_keywords"], "America/New_York", NOW)
+        self.assertEqual([(f.start, f.items) for f in got], [
+            (datetime(2026, 10, 14, 21, 0, tzinfo=UTC), ["Pokemon Trading Card Game Prismatic Evolutions Elite Trainer Box"]),
+            (datetime(2026, 10, 21, 21, 0, tzinfo=UTC), ["Pokémon TCG: Knock Out Collection"]),
+        ])
+
+
 class Classify(unittest.TestCase):
     def page(self, url="https://x.com/", body="", status=200, headers=""):
         return d.Page(status, url, headers, body)
@@ -61,6 +78,9 @@ class Classify(unittest.TestCase):
 
     def test_incapsula_block(self):
         self.assertEqual(self.c(self.page(body="Request unsuccessful. Incapsula incident ID: 1")), "blocked")
+
+    def test_walmart_waiting_hallway(self):
+        self.assertEqual(self.c(self.page(url="https://www.walmart.com/waiting-hallway?u=1")), "queue")
 
     def test_px_block(self):
         self.assertEqual(self.c(self.page(url="https://www.walmart.com/blocked?url=L2")), "blocked")
