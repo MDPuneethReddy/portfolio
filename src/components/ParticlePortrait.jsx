@@ -122,6 +122,8 @@ export default function ParticlePortrait({ src, talking = false, className = '' 
       mouse.x = -9999
       mouse.y = -9999
     }
+    // Touch: start pushing dots as soon as the finger lands, release on lift.
+    const onTouchUp = (e) => e.pointerType !== 'mouse' && onLeave()
     const onResize = () => {
       cancelAnimationFrame(raf)
       build()
@@ -133,6 +135,9 @@ export default function ParticlePortrait({ src, talking = false, className = '' 
       raf = requestAnimationFrame(draw)
     }
     window.addEventListener('pointermove', onMove, { passive: true })
+    window.addEventListener('pointerdown', onMove, { passive: true })
+    window.addEventListener('pointerup', onTouchUp, { passive: true })
+    window.addEventListener('pointercancel', onTouchUp, { passive: true })
     canvas.addEventListener('pointerleave', onLeave)
     window.addEventListener('resize', onResize)
 
@@ -147,6 +152,9 @@ export default function ParticlePortrait({ src, talking = false, className = '' 
       cancelAnimationFrame(raf)
       io.disconnect()
       window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerdown', onMove)
+      window.removeEventListener('pointerup', onTouchUp)
+      window.removeEventListener('pointercancel', onTouchUp)
       canvas.removeEventListener('pointerleave', onLeave)
       window.removeEventListener('resize', onResize)
     }

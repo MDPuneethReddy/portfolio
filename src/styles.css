@@ -164,7 +164,10 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
 .th-title .outline { color: transparent; -webkit-text-stroke: 2px var(--fg); }
 .th-role { font-size: clamp(17px, 1.6vw, 22px); color: var(--mute); margin: 22px 0 30px; max-width: 34ch; }
 .th-actions { display: flex; flex-wrap: wrap; gap: 12px; }
-.th-portrait { position: relative; height: min(68vh, 700px); align-self: end; cursor: pointer; }
+.th-portrait { position: relative; height: min(68vh, 700px); align-self: end; cursor: pointer; touch-action: pan-y; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+.th-portrait.touching .th-illus { opacity: 0 !important; transform: translateX(-50%) scale(.98); }
+.th-portrait.touching .particles { opacity: 1 !important; animation: none; }
+.th-portrait.touching .th-tap { opacity: 0 !important; }
 .th-portrait .particles { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity .8s var(--ease); }
 .th-illus {
   position: absolute; left: 50%; bottom: 0; height: 100%; width: auto; max-width: none; transform: translateX(-50%);
@@ -676,3 +679,29 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
 .rv-pages { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 28px 16px 60px; }
 .rv-page { width: min(860px, 100%); height: auto; border-radius: 6px; box-shadow: 0 30px 80px rgba(0,0,0,.6); background: #fff; }
 @media (max-width: 600px) { .hide-xs { display: none; } .rv-title b { font-size: 14px; } }
+
+/* Touch devices: no hover or custom cursor, so show an explicit play button on the portrait. */
+.th-tap { display: none; }
+@media (hover: none), (pointer: coarse) {
+  .th-tap {
+    position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%); z-index: 3;
+    display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
+    padding: 8px 16px 8px 8px; border-radius: 999px;
+    background: rgba(11,11,12,.78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--line); font-size: 14px; font-weight: 700; line-height: 1.2;
+    opacity: 0; animation: fadeIn .6s ease 2.8s forwards; pointer-events: none; transition: opacity .3s;
+  }
+  .th-tap > span:last-child { display: flex; flex-direction: column; }
+  .th-tap small { font-family: var(--mono); font-size: 10px; font-weight: 400; color: var(--mute); letter-spacing: .04em; }
+  .th-tap-icon {
+    position: relative; width: 36px; height: 36px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--red); color: #fff; font-size: 13px;
+  }
+  .th-tap-icon svg { margin-left: 2px; }
+  .th-tap-icon::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--red);
+    animation: tapPulse 1.8s ease-out infinite;
+  }
+  .th-hint { display: none; }
+}
+@keyframes tapPulse { from { transform: scale(1); opacity: .9; } to { transform: scale(1.9); opacity: 0; } }
