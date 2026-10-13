@@ -12,9 +12,8 @@ export const person = {
   resume: '/assets/Resume.pdf',
   // Swap these files in public/media/ to change photos across the site.
   photo: '/media/face.jpg', // mini-me head (square)
-  heroCutout: '/media/cutout-bw.webp', // hero portrait, transparent background
+  heroCutout: '/media/hero-cutout.webp', // hero portrait, transparent background
   idPhoto: '/media/id-photo.jpg', // ID card photo (4:5)
-  introVideo: null, // e.g. '/media/intro.mp4' — a 15–30s talking clip replaces the hero portrait
   idNumber: 'PR-2019-FS',
   yearsExperience: '5+',
 }
@@ -27,7 +26,7 @@ export const profiles = [
     color: '#E50914',
     tagline: 'Hiring a full-stack engineer? Your search ends here.',
     rows: ['experience', 'skills', 'projects', 'education', 'certifications'],
-    intro: "Hi, I'm Puneeth. I'm a full-stack engineer with five years of shipping React, Node and Python products — at Novartis, and now at Florida State University. If you're hiring, you're in the right place.",
+    storyHook: "Hey, I'm Puneeth 👋 Hiring? Give me 30 seconds and I'll show you why I'm worth the call.",
     greeting: "Hi there! Looking for a dev who ships? You're in the right place.",
   },
   {
@@ -36,7 +35,7 @@ export const profiles = [
     color: '#2E7DF6',
     tagline: 'React, Node, Python, Docker, queues & pipelines — let’s talk shop.',
     rows: ['projects', 'skills', 'experience', 'certifications', 'education'],
-    intro: "Hey, I'm Puneeth. I build things end to end: React front ends, Node and FastAPI services, RabbitMQ pipelines, all of it Dockerized. Scroll down and look at the stack.",
+    storyHook: "Hey, I'm Puneeth 👋 Fellow dev? Cool. Here's how I work, in six frames.",
     greeting: 'Hey fellow dev! Want to peek at the code? Check out my projects.',
   },
   {
@@ -45,7 +44,7 @@ export const profiles = [
     color: '#F5C518',
     tagline: 'Curious who I am? Grab the popcorn, the full series is here.',
     rows: ['experience', 'projects', 'education', 'skills', 'certifications'],
-    intro: "Oh, hi. I'm Puneeth. Engineer, beach person, occasional night-walk photographer. Since you're curious, here's the whole story.",
+    storyHook: "Oh, hi 👀 I'm Puneeth. Since you're curious, here's the whole story.",
     greeting: "Oh hey, I see you snooping 👀 No worries — I'll give you the tour!",
   },
   {
@@ -54,7 +53,7 @@ export const profiles = [
     color: '#1DB954',
     tagline: 'Beaches, night walks & side projects. Coding is just one season.',
     rows: ['projects', 'experience', 'skills', 'education', 'certifications'],
-    intro: "Welcome, explorer. I'm Puneeth. I've built software across pharma, research and startups. Come see where the journey has gone so far.",
+    storyHook: "Welcome, explorer! I'm Puneeth. Come along for a quick adventure.",
     greeting: 'Welcome, explorer! Let me show you what I’ve built on my journey.',
   },
 ]
@@ -313,11 +312,12 @@ export const certifications = [
   { id: 'java', title: 'Java Programming: Solving Problems with Software', issuer: 'Coursera · Duke', link: 'https://www.coursera.org/account/accomplishments/verify/8PSMV5FWZ5RQ', art: { palette: ['#012169', '#E76F00'], motif: 'bars' } },
 ]
 
-// Scenes for the "Play" trailer
-export const trailer = [
-  { image: '/media/beach.jpg', line: "Hi, I'm Puneeth — a full-stack engineer.", pos: 'center 30%' },
-  { image: '/media/hero-night.jpg', line: 'I turn ideas into fast, scalable, delightful web apps.', pos: 'center 35%' },
-  { image: null, line: 'React · Node · Python · FastAPI · GraphQL · Docker · RabbitMQ', motif: 'circuit' },
-  { image: null, line: 'Novartis. Florida State University. 5+ years of shipping.', motif: 'waves' },
-  { image: '/media/sunset.jpg', line: 'Next episode? Let’s build it together.', pos: 'center 40%' },
+// "Watch my story" — six illustrated episodes. `side` places the speech bubble.
+export const story = [
+  { image: '/media/story-1.jpg', ep: 'Ep. 1', title: 'Hi, it’s me', line: null, side: 'right', pos: 'center 30%' },
+  { image: '/media/story-2.jpg', ep: 'Ep. 2', title: 'Figma → production', line: 'This dashboard? Sketched it in Figma on Monday, shipped it on Friday.', side: 'left', pos: 'center 30%' },
+  { image: '/media/story-3.jpg', ep: 'Ep. 3', title: 'The meeting', line: 'I turn “can we just…” into a scoped plan, then actually deliver it.', side: 'left', pos: '70% 30%' },
+  { image: '/media/story-4.jpg', ep: 'Ep. 4', title: 'New doors', line: 'Novartis. Florida State University. I walk in, ship, and leave things better.', side: 'right', pos: 'center 25%' },
+  { image: '/media/story-5.jpg', ep: 'Ep. 5', title: 'Deep work', line: 'React up front, Node and Python behind it, tests everywhere. This is my happy place.', side: 'left', pos: '65% 30%' },
+  { image: '/media/story-6.jpg', ep: 'Ep. 6', title: 'To be continued…', line: 'The next episode is your project. Shall we write it together?', side: 'right', pos: '35% 30%' },
 ]

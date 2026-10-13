@@ -12,7 +12,7 @@ import SideScroll from './components/SideScroll'
 import PeriodicTable from './components/PeriodicTable'
 import ProjectList from './components/ProjectList'
 import DetailModal from './components/DetailModal'
-import Trailer from './components/Trailer'
+import StoryMode from './components/StoryMode'
 import Buddy from './components/Buddy'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -42,7 +42,8 @@ export default function App() {
   const [stage, setStage] = useState(stored ? 'browse' : 'intro')
   const [profile, setProfile] = useState(stored || profiles[0])
   const [detail, setDetail] = useState(null)
-  const [playing, setPlaying] = useState(false)
+  const [storyAt, setStoryAt] = useState(null)
+  const playing = storyAt !== null
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 30 })
 
@@ -95,7 +96,7 @@ export default function App() {
 
   const open = (kind) => (x) => setDetail(asDetail[kind](x))
   const closeDetail = useCallback(() => setDetail(null), [])
-  const closeTrailer = useCallback(() => setPlaying(false), [])
+  const closeStory = useCallback(() => setStoryAt(null), [])
 
   return (
     <>
@@ -110,7 +111,7 @@ export default function App() {
           <motion.div className="scroll-progress" style={{ scaleX: progress }} />
           <Navbar profile={profile} onSwitch={switchProfile} />
           <main>
-            <TalkingHero profile={profile} onTrailer={() => setPlaying(true)} />
+            <TalkingHero profile={profile} onStory={setStoryAt} />
             <Marquee items={STACK} />
             <About />
             <SideScroll onOpen={open('experience')} />
@@ -126,7 +127,7 @@ export default function App() {
 
       <AnimatePresence>
         {detail && <DetailModal key="detail" item={detail} onClose={closeDetail} />}
-        {playing && <Trailer key="trailer" onClose={closeTrailer} />}
+        {playing && <StoryMode key="story" profile={profile} start={storyAt} onClose={closeStory} />}
       </AnimatePresence>
       <span hidden>{person.name}</span>
     </>
