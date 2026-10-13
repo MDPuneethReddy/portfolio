@@ -10,8 +10,12 @@ export const person = {
   github: 'https://github.com/MDPuneethReddy',
   blog: 'https://blog.mdpuneethreddy.com',
   resume: '/assets/Resume.pdf',
-  photo: '/media/face.jpg',
-  heroPhoto: '/media/hero-night.jpg',
+  // Swap these files in public/media/ to change photos across the site.
+  photo: '/media/face.jpg', // mini-me head (square)
+  heroCutout: '/media/cutout-bw.webp', // hero portrait, transparent background
+  idPhoto: '/media/id-photo.jpg', // ID card photo (4:5)
+  introVideo: null, // e.g. '/media/intro.mp4' — a 15–30s talking clip replaces the hero portrait
+  idNumber: 'PR-2019-FS',
   yearsExperience: '5+',
 }
 
@@ -23,6 +27,7 @@ export const profiles = [
     color: '#E50914',
     tagline: 'Hiring a full-stack engineer? Your search ends here.',
     rows: ['experience', 'skills', 'projects', 'education', 'certifications'],
+    intro: "Hi, I'm Puneeth. I'm a full-stack engineer with five years of shipping React, Node and Python products — at Novartis, and now at Florida State University. If you're hiring, you're in the right place.",
     greeting: "Hi there! Looking for a dev who ships? You're in the right place.",
   },
   {
@@ -31,6 +36,7 @@ export const profiles = [
     color: '#2E7DF6',
     tagline: 'React, Node, Python, Docker, queues & pipelines — let’s talk shop.',
     rows: ['projects', 'skills', 'experience', 'certifications', 'education'],
+    intro: "Hey, I'm Puneeth. I build things end to end: React front ends, Node and FastAPI services, RabbitMQ pipelines, all of it Dockerized. Scroll down and look at the stack.",
     greeting: 'Hey fellow dev! Want to peek at the code? Check out my projects.',
   },
   {
@@ -39,6 +45,7 @@ export const profiles = [
     color: '#F5C518',
     tagline: 'Curious who I am? Grab the popcorn, the full series is here.',
     rows: ['experience', 'projects', 'education', 'skills', 'certifications'],
+    intro: "Oh, hi. I'm Puneeth. Engineer, beach person, occasional night-walk photographer. Since you're curious, here's the whole story.",
     greeting: "Oh hey, I see you snooping 👀 No worries — I'll give you the tour!",
   },
   {
@@ -47,6 +54,7 @@ export const profiles = [
     color: '#1DB954',
     tagline: 'Beaches, night walks & side projects. Coding is just one season.',
     rows: ['projects', 'experience', 'skills', 'education', 'certifications'],
+    intro: "Welcome, explorer. I'm Puneeth. I've built software across pharma, research and startups. Come see where the journey has gone so far.",
     greeting: 'Welcome, explorer! Let me show you what I’ve built on my journey.',
   },
 ]
@@ -54,6 +62,7 @@ export const profiles = [
 export const experiences = [
   {
     id: 'fsu-intern',
+    highlight: 'GPU-deployed apps',
     title: 'Software Developer Intern',
     company: 'Florida State University',
     date: 'May 2024 – Present',
@@ -71,6 +80,7 @@ export const experiences = [
   },
   {
     id: 'fsu-ra',
+    highlight: 'Research tooling',
     title: 'Graduate Research Assistant — Automated Software Development',
     company: 'Florida State University',
     date: 'Aug 2023 – May 2024',
@@ -86,6 +96,7 @@ export const experiences = [
   },
   {
     id: 'novartis-fs',
+    highlight: '−20% company spend',
     title: 'Full Stack Developer',
     company: 'Novartis',
     date: 'Aug 2021 – Dec 2022',
@@ -104,6 +115,7 @@ export const experiences = [
   },
   {
     id: 'novartis-de',
+    highlight: 'Python → Node migration',
     title: 'Data Engineer Intern',
     company: 'Novartis',
     date: 'Aug 2020 – Jul 2021',
@@ -120,6 +132,7 @@ export const experiences = [
   },
   {
     id: 'grepthor',
+    highlight: 'First app shipped',
     title: 'Software Developer Intern',
     company: 'Grepthor Software Solutions',
     date: 'Jun 2019 – Aug 2019',
@@ -228,28 +241,49 @@ export const projects = [
   },
 ]
 
-// Skills: name + react-icons key (resolved in components/SkillIcon.jsx)
+// Periodic table of skills. cat: lang | front | back | data | ops | test
+export const skillCategories = {
+  lang: 'Languages',
+  front: 'Frontend',
+  back: 'Backend',
+  data: 'Data',
+  ops: 'DevOps & Cloud',
+  test: 'Testing & Design',
+}
 export const skills = [
-  { name: 'JavaScript', icon: 'js', level: 95 },
-  { name: 'TypeScript', icon: 'ts', level: 90 },
-  { name: 'React', icon: 'react', level: 95 },
-  { name: 'Node.js', icon: 'node', level: 92 },
-  { name: 'Python', icon: 'python', level: 90 },
-  { name: 'Next.js', icon: 'next', level: 80 },
-  { name: 'FastAPI', icon: 'fastapi', level: 82 },
-  { name: 'GraphQL', icon: 'graphql', level: 85 },
-  { name: 'PostgreSQL', icon: 'postgres', level: 88 },
-  { name: 'MongoDB', icon: 'mongo', level: 80 },
-  { name: 'Docker', icon: 'docker', level: 85 },
-  { name: 'RabbitMQ', icon: 'rabbit', level: 85 },
-  { name: 'Redis', icon: 'redis', level: 78 },
-  { name: 'Java', icon: 'java', level: 75 },
-  { name: 'Spring Boot', icon: 'spring', level: 70 },
-  { name: 'Cypress', icon: 'cypress', level: 85 },
-  { name: 'Jest', icon: 'jest', level: 88 },
-  { name: 'Figma', icon: 'figma', level: 85 },
-  { name: 'Git', icon: 'git', level: 92 },
-  { name: 'Jenkins', icon: 'jenkins', level: 72 },
+  { sym: 'Js', name: 'JavaScript', cat: 'lang', level: 95 },
+  { sym: 'Ts', name: 'TypeScript', cat: 'lang', level: 90 },
+  { sym: 'Py', name: 'Python', cat: 'lang', level: 90 },
+  { sym: 'Jv', name: 'Java', cat: 'lang', level: 75 },
+  { sym: 'Sq', name: 'SQL', cat: 'lang', level: 88 },
+  { sym: 'Re', name: 'React', cat: 'front', level: 95 },
+  { sym: 'Nx', name: 'Next.js', cat: 'front', level: 80 },
+  { sym: 'Rx', name: 'Redux', cat: 'front', level: 85 },
+  { sym: 'Ht', name: 'HTML', cat: 'front', level: 95 },
+  { sym: 'Cs', name: 'CSS', cat: 'front', level: 85 },
+  { sym: 'Tw', name: 'Tailwind', cat: 'front', level: 82 },
+  { sym: 'D3', name: 'D3.js', cat: 'front', level: 78 },
+  { sym: 'No', name: 'Node.js', cat: 'back', level: 92 },
+  { sym: 'Ex', name: 'Express', cat: 'back', level: 90 },
+  { sym: 'Fa', name: 'FastAPI', cat: 'back', level: 82 },
+  { sym: 'Fl', name: 'Flask', cat: 'back', level: 75 },
+  { sym: 'Gq', name: 'GraphQL', cat: 'back', level: 85 },
+  { sym: 'Sb', name: 'Spring Boot', cat: 'back', level: 70 },
+  { sym: 'Ws', name: 'WebSockets', cat: 'back', level: 84 },
+  { sym: 'Rq', name: 'RabbitMQ', cat: 'back', level: 85 },
+  { sym: 'Pg', name: 'PostgreSQL', cat: 'data', level: 88 },
+  { sym: 'My', name: 'MySQL', cat: 'data', level: 86 },
+  { sym: 'Mg', name: 'MongoDB', cat: 'data', level: 80 },
+  { sym: 'Rd', name: 'Redis', cat: 'data', level: 78 },
+  { sym: 'Dk', name: 'Docker', cat: 'ops', level: 85 },
+  { sym: 'Aw', name: 'AWS', cat: 'ops', level: 72 },
+  { sym: 'Gt', name: 'Git', cat: 'ops', level: 92 },
+  { sym: 'Jk', name: 'Jenkins', cat: 'ops', level: 72 },
+  { sym: 'Pm', name: 'Prometheus', cat: 'ops', level: 74 },
+  { sym: 'Je', name: 'Jest', cat: 'test', level: 88 },
+  { sym: 'Cy', name: 'Cypress', cat: 'test', level: 85 },
+  { sym: 'K6', name: 'k6', cat: 'test', level: 76 },
+  { sym: 'Fg', name: 'Figma', cat: 'test', level: 85 },
 ]
 
 export const education = [
@@ -281,7 +315,8 @@ export const certifications = [
 
 // Scenes for the "Play" trailer
 export const trailer = [
-  { image: '/media/beach.jpg', line: "Hi, I'm Puneeth — a full-stack engineer.", pos: 'center 30%' },
+  { image: '/media/poster.jpg', line: "Hi, I'm Puneeth — a full-stack engineer.", pos: 'center 20%' },
+  { image: '/media/beach.jpg', line: 'Based in Florida. Building since 2019.', pos: 'center 30%' },
   { image: '/media/hero-night.jpg', line: 'I turn ideas into fast, scalable, delightful web apps.', pos: 'center 35%' },
   { image: null, line: 'React · Node · Python · FastAPI · GraphQL · Docker · RabbitMQ', motif: 'circuit' },
   { image: null, line: 'Novartis. Florida State University. 5+ years of shipping.', motif: 'waves' },
