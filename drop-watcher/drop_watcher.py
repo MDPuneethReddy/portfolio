@@ -368,6 +368,10 @@ def classify(page: Page, queue_patterns: list[str], blocked_patterns: list[str],
     return "open"
 
 
+# Bump when security_fingerprint() changes, so stored baselines are re-recorded
+# instead of looking like a change on the site.
+FINGERPRINT_VERSION = 2
+
 SECURITY_MARKERS = {
     "waiting_room_cookie": r"incap_wrt",
     "reese84": r"reese84",
@@ -391,6 +395,7 @@ def security_fingerprint(page: Page) -> dict:
     scripts = sorted({src.split("?")[0] for src in re.findall(r'<script[^>]*\bsrc="([^"]+)"', page.body, re.I)})
     iinfo = re.search(r"(?im)^x-iinfo:\s*(.+)$", page.headers)
     fp = {
+        "version": FINGERPRINT_VERSION,
         "status": page.status,
         "cookies": cookies,
         "scripts": scripts[:20],
@@ -666,8 +671,9 @@ class Watcher:
         """Alert when the bot-protection fingerprint changes (seen twice in a row)."""
         name = site["name"]
         sig = hashlib.sha1(json.dumps(fp, sort_keys=True).encode()).hexdigest()[:12]
-        if "fp" not in st:
+        if st.get("fp", {}).get("version") != FINGERPRINT_VERSION:
             st["fp"], st["fp_sig"] = fp, sig
+            st.pop("fp_pending", None)
             self.record("security_baseline", f"{name} security fingerprint recorded ({sig})")
             return
         if sig == st["fp_sig"]:

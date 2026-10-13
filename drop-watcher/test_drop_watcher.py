@@ -209,6 +209,12 @@ class SecurityWatch(unittest.TestCase):
         self.run_with(incap_page(script="/new-challenge-script"))
         self.assertEqual(len(self.out.sent), 1)
 
+    def test_old_format_baseline_is_rerecorded_without_alert(self):
+        self.w.state["sites"]["Pokémon Center"] = {"fp": {"iinfo": "0NNN U24"}, "fp_sig": "old"}
+        for _ in range(3):
+            self.run_with(incap_page())
+        self.assertEqual(self.out.sent, [])
+
     def test_single_blip_is_ignored(self):
         self.run_with(incap_page())
         self.run_with(incap_page(script="/blip"))
