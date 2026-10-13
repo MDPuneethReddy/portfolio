@@ -1,15 +1,20 @@
 # Drop watcher settings. Patterns are case-insensitive regular expressions and
 # are added to the built-in defaults in drop_watcher.py.
 
-# How often `--loop` checks, in seconds (±20% jitter). GitHub Actions uses its own cron.
-interval_seconds = 300
+# How often `--loop` checks, in seconds (±20% jitter). GitHub Actions runs
+# everything every 5 minutes on its own schedule.
+queue_interval_seconds = 60   # queues: alert within about a minute
+interval_seconds = 300        # drawing announcement pages
 
 # Times in alerts are shown in these zones; the first one is the "main" one.
 display_timezones = ["America/New_York", "America/Los_Angeles"]
 
-# Reminders before a drawing opens, in minutes. An "it's open" alert at the
-# start time is always sent too.
-reminder_minutes = [60, 15]
+# Drawings: you get one alert as soon as a drawing is found, then a reminder
+# this many minutes before it opens. Add more, e.g. [60, 5].
+reminder_minutes = [5]
+
+# Also alert at the exact opening time.
+remind_at_open = false
 
 # Drawings give you about an hour to enter.
 entry_window_minutes = 60

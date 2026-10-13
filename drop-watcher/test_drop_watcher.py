@@ -99,7 +99,7 @@ class Recorder(d.Notifier):
 
 
 class Reminders(unittest.TestCase):
-    config = {"reminder_minutes": [60, 15], "entry_window_minutes": 60,
+    config = {"reminder_minutes": [5], "entry_window_minutes": 60,
               "display_timezones": ["America/New_York"]}
     src = {"name": "src", "retailer": "Walmart", "url": "https://example.com"}
 
@@ -112,28 +112,42 @@ class Reminders(unittest.TestCase):
     def at(self, when):
         return mock.patch.object(d, "now_utc", return_value=when)
 
-    def test_announce_schedules_ntfy_and_loop_sends_discord(self):
+    def test_alert_on_detection_then_five_minutes_before(self):
         start = NOW + timedelta(hours=3)
         with self.at(NOW):
             self.w.add_event(self.src, d.FoundTime(start, "Walmart drawing"))
         self.assertEqual([t for t, _ in self.discord.sent], ["Walmart drawing announced"])
-        scheduled = [at for _, at in self.ntfy.sent if at]
-        self.assertEqual(scheduled, [start - timedelta(minutes=60), start - timedelta(minutes=15), start])
+        # ntfy gets the announcement now plus exactly one held reminder at T-5.
+        self.assertEqual([at for _, at in self.ntfy.sent], [None, start - timedelta(minutes=5)])
 
-        with self.at(start - timedelta(minutes=59)):
+        with self.at(start - timedelta(minutes=6)):
             self.w.send_due_reminders()
-        self.assertEqual(self.discord.sent[-1][0], "Walmart drawing in 1h")
-        self.assertEqual(len([s for s in self.ntfy.sent if s[1] is None]), 1)  # only the announcement
+        self.assertEqual(len(self.discord.sent), 1)  # not yet
 
-        with self.at(start - timedelta(minutes=59)):
+        with self.at(start - timedelta(minutes=5)):
+            self.w.send_due_reminders()
             self.w.send_due_reminders()  # no duplicates
-        self.assertEqual(len(self.discord.sent), 2)
+        self.assertEqual([t for t, _ in self.discord.sent][1:], ["Walmart drawing in 5m"])
+        self.assertEqual(len(self.ntfy.sent), 2)  # ntfy already holds it; not sent twice
 
-    def test_late_run_sends_only_latest_reminder(self):
+        with self.at(start + timedelta(minutes=1)):
+            self.w.send_due_reminders()
+        self.assertEqual(len(self.discord.sent), 2)  # no "open" alert unless asked for
+
+    def test_found_less_than_five_minutes_before_sends_only_announcement(self):
+        start = NOW + timedelta(minutes=3)
+        with self.at(NOW):
+            self.w.add_event(self.src, d.FoundTime(start, "x"))
+        with self.at(start - timedelta(minutes=1)):
+            self.w.send_due_reminders()
+        self.assertEqual([t for t, _ in self.discord.sent], ["Walmart drawing announced"])
+
+    def test_remind_at_open_option(self):
+        self.w.config = {**self.config, "remind_at_open": True}
         start = NOW + timedelta(hours=3)
         with self.at(NOW):
             self.w.add_event(self.src, d.FoundTime(start, "x"))
-        with self.at(start + timedelta(minutes=5)):
+        with self.at(start + timedelta(minutes=2)):  # late run: only the latest one
             self.w.send_due_reminders()
         self.assertEqual([t for t, _ in self.discord.sent][1:], ["Walmart drawing is OPEN"])
 

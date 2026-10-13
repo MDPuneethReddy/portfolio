@@ -652,7 +652,7 @@ class Watcher:
         now = now_utc()
         label = src.get("label", "drawing")
         window = timedelta(minutes=self.config.get("entry_window_minutes", 60))
-        offsets = sorted(set(self.config.get("reminder_minutes", [60, 15]) + [0]), reverse=True)
+        offsets = self.reminder_offsets()
         ev = {
             "retailer": retailer, "label": label, "source": src["name"],
             "url": src.get("open_url", src["url"]), "start": iso(f.start),
@@ -672,8 +672,10 @@ class Watcher:
         detail = ("Items: " + summarize_items(f.items, 8)) if f.items else f"“{f.snippet[:200]}”"
         self.notify(
             f"{retailer} {label} announced",
-            f"Opens {when} (in {fmt_delta(f.start - now)}). Entry window ~{int(window.total_seconds() // 60)} min.\n"
-            + detail,
+            f"Opens {when} (in {fmt_delta(f.start - now)}). Entry window ~{int(window.total_seconds() // 60)} min."
+            + (f" Reminder {self.reminder_offsets()[0]} min before." if [o for o in self.reminder_offsets()
+                                                                       if o not in ev["sent"] and o] else "")
+            + "\n" + detail,
             url=ev["url"], priority=4, tags=["calendar"],
         )
         # Hand future reminders to notifiers that can deliver them on time.
@@ -692,6 +694,13 @@ class Watcher:
                 except Exception as e:
                     print(f"scheduling via {n.name} failed: {e}", file=sys.stderr)
             ev["scheduled"][n.name] = keys
+
+    def reminder_offsets(self) -> list[int]:
+        """Minutes before the start to remind at, largest first (0 = at opening)."""
+        offsets = set(self.config.get("reminder_minutes", [5]))
+        if self.config.get("remind_at_open", False):
+            offsets.add(0)
+        return sorted(offsets, reverse=True)
 
     def reminder_text(self, ev: dict, offset: int) -> tuple[str, str, int]:
         start = parse_iso(ev["start"])
@@ -712,7 +721,7 @@ class Watcher:
             start = parse_iso(ev["start"])
             if now > start + window:
                 continue
-            offsets = sorted(set(self.config.get("reminder_minutes", [60, 15]) + [0]), reverse=True)
+            offsets = self.reminder_offsets()
             due = [o for o in offsets if o not in ev["sent"] and now >= start - timedelta(minutes=o)]
             if not due:
                 continue
@@ -738,13 +747,14 @@ class Watcher:
             return False
         return True
 
-    def run_once(self) -> None:
+    def run_once(self, drawings: bool = True) -> None:
         for site in self.config.get("queue_sites", []):
             if self.wanted(site):
                 self.check_queue_site(site)
-        for src in self.config.get("announcement_sources", []):
-            if self.wanted(src):
-                self.check_announcements(src)
+        if drawings:
+            for src in self.config.get("announcement_sources", []):
+                if self.wanted(src):
+                    self.check_announcements(src)
         self.send_due_reminders()
         self.prune()
 
@@ -756,7 +766,8 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", type=Path, default=HERE / "config.toml")
     ap.add_argument("--state", type=Path, default=HERE / "state.json")
-    ap.add_argument("--loop", action="store_true", help="keep running every interval_seconds")
+    ap.add_argument("--loop", action="store_true",
+                    help="keep running: queues every queue_interval_seconds, drawings every interval_seconds")
     ap.add_argument("--browser", action="store_true", help="fetch every page with headless Chromium")
     ap.add_argument("--dry-run", action="store_true", help="print alerts instead of sending them")
     ap.add_argument("--test-notify", action="store_true", help="send one test alert and exit")
@@ -773,17 +784,24 @@ def main(argv: list[str] | None = None) -> int:
         print(f"sent via: {', '.join(sorted(ok)) or 'nothing'}")
         return 0 if ok else 1
 
+    # Queues need an alert within a minute; drawings are announced hours ahead,
+    # so their pages are read less often.
+    drawing_every = config.get("interval_seconds", 300)
+    queue_every = config.get("queue_interval_seconds", 60) if args.loop else drawing_every
+    last_drawings = 0.0
     while True:
         state = load_state(args.state)
         watcher = Watcher(config, state, notifiers, force_browser=args.browser, only=set(args.only))
+        drawings = time.monotonic() - last_drawings >= drawing_every * 0.8
         try:
-            watcher.run_once()
+            watcher.run_once(drawings=drawings)
         finally:
             save_state(args.state, state)
+        if drawings:
+            last_drawings = time.monotonic()
         if not args.loop:
             return 0
-        base = config.get("interval_seconds", 300)
-        time.sleep(base * random.uniform(0.8, 1.2))
+        time.sleep(queue_every * random.uniform(0.8, 1.2))
 
 
 if __name__ == "__main__":

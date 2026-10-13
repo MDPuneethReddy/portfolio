@@ -2,10 +2,12 @@
 
 Pushes a phone alert when:
 
-- **a queue goes up** at Pokémon Center, Costco or Sam's Club, and when it ends;
-- **a drawing (raffle) is announced** for Walmart or Target. It records the start
-  time and reminds you **60 and 15 minutes before**, then again **when entry opens**.
-  You get about an hour to enter, so you don't need to be first.
+- **a queue goes up** at Pokémon Center, Costco or Sam's Club: an urgent alert right
+  away (checked every minute when run with `--loop`), plus a note when it ends;
+- **a drawing (raffle) is found** for Walmart or Target: one alert as soon as it is
+  spotted, with the start time and items, and a reminder **5 minutes before it opens**.
+  You get about an hour to enter, so you don't need to be first. Change the timing
+  with `reminder_minutes` and `remind_at_open` in `config.toml`.
 
 Everything is in `config.toml`: sites, keywords, reminder times, time zones.
 Plain Python 3.11+, no packages needed.
@@ -35,7 +37,7 @@ Detected drawings and queue history are saved to `state.json` on the
 ```bash
 export NTFY_TOPIC=puneeth-drops-k29fx7q
 python3 drop-watcher/drop_watcher.py --test-notify   # check alerts arrive
-python3 drop-watcher/drop_watcher.py --loop           # check every ~5 min, forever
+python3 drop-watcher/drop_watcher.py --loop           # queues every ~1 min, drawings every ~5 min
 ```
 
 Pokémon Center (Imperva) and Sam's Club ("Robot or human?") block cloud
