@@ -26,6 +26,5 @@ Photos live in `public/media/` (`face.jpg` is the mini-me's head,
 
 ## Contact form
 
-Set `REACT_APP_FORMSPREE_ID` (or `VITE_FORMSPREE_ID`-style prefix `REACT_APP_`
-is kept for compatibility) in your host's environment. Without it, the form
-falls back to opening an email to you.
+Set `REACT_APP_FORMSPREE_ID` in your host's environment (same variable as the
+old site). Without it, the form falls back to opening an email to you.
