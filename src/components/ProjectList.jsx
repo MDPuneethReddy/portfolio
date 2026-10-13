@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
 import { projects } from '../data'
 import PosterArt from './PosterArt'
+import { RevealTitle } from './Reveal'
 
 // Big type list; the poster follows your cursor on hover.
 export default function ProjectList({ onOpen }) {
@@ -19,11 +20,11 @@ export default function ProjectList({ onOpen }) {
   return (
     <section id="projects" className="pl" onMouseMove={move}>
       <p className="kicker">Now streaming</p>
-      <h2>Projects</h2>
+      <RevealTitle>Projects</RevealTitle>
       <ol className="pl-list">
         {projects.map((p, i) => (
           <li key={p.id}>
-            <button onClick={() => onOpen(p)} onMouseEnter={() => setHover(p)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(null)}>
+            <button data-cursor="View" onClick={() => onOpen(p)} onMouseEnter={() => setHover(p)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(null)}>
               <span className="pl-n">{String(i + 1).padStart(2, '0')}</span>
               <span className="pl-thumb"><PosterArt id={p.id + '-t'} art={p.art} /></span>
               <span className="pl-title">{p.title}</span>

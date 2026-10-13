@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { skills, skillCategories } from '../data'
+import { RevealTitle } from './Reveal'
 
 export default function PeriodicTable() {
   const [active, setActive] = useState(skills.find((s) => s.sym === 'Re'))
@@ -11,7 +12,7 @@ export default function PeriodicTable() {
       <div className="pt-head">
         <div>
           <p className="kicker">The elements</p>
-          <h2>Periodic table of skills</h2>
+          <RevealTitle>Periodic table of skills</RevealTitle>
         </div>
         <div className="pt-legend" role="group" aria-label="Filter by category">
           {Object.entries(skillCategories).map(([k, label]) => (

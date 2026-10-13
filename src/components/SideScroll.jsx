@@ -1,6 +1,7 @@
 import React, { useRef, useState, useLayoutEffect } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { experiences, certifications } from '../data'
+import { RevealTitle } from './Reveal'
 
 // Vertical scroll drives a sideways journey through each role.
 export default function SideScroll({ onOpen }) {
@@ -27,11 +28,11 @@ export default function SideScroll({ onOpen }) {
       <div className="ss-sticky">
         <div className="ss-head">
           <p className="kicker">The series so far</p>
-          <h2>Experience</h2>
+          <RevealTitle>Experience</RevealTitle>
         </div>
         <motion.div className="ss-track" ref={track} style={{ x }}>
           {ordered.map((e, i) => (
-            <article key={e.id} className="ss-panel" onClick={() => onOpen(e)}>
+            <article key={e.id} className="ss-panel" onClick={() => onOpen(e)} data-cursor="Open">
               <span className="ss-year" aria-hidden="true">{e.date.match(/\d{4}/)[0]}</span>
               <p className="ss-ep">S{i + 1} · {e.date}</p>
               <h3>{e.company}</h3>

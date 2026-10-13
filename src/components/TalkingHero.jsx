@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { FaPlay } from 'react-icons/fa'
 import { FiVolume2, FiSquare, FiFilm } from 'react-icons/fi'
 import { person } from '../data'
+import ParticlePortrait from './ParticlePortrait'
 
 // The hero introduces me before you scroll: captions play word by word, and
 // "Hear me say hi" reads them aloud with the browser's voice. If an intro
@@ -86,6 +87,7 @@ export default function TalkingHero({ profile, onTrailer }) {
   return (
     <section id="home" className="th">
       <div className="th-grid" aria-hidden="true" />
+      <div className="th-ghost" aria-hidden="true">PR</div>
       <div className="th-left">
         <motion.p className="th-eyebrow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
           <span className="p-mark">P</span> Now streaming · {person.location}
@@ -110,13 +112,7 @@ export default function TalkingHero({ profile, onTrailer }) {
         {person.introVideo ? (
           <video ref={videoRef} src={person.introVideo} autoPlay muted loop playsInline className="th-video" />
         ) : (
-          <motion.img
-            src={person.heroCutout}
-            alt="Puneeth Reddy"
-            initial={{ opacity: 0, scale: 1.05, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1.1, delay: 0.2 }}
-          />
+          <ParticlePortrait src={person.heroCutout} talking={speaking} />
         )}
         <div className={'th-eq' + (speaking ? ' on' : '')} aria-hidden="true">
           {Array.from({ length: 5 }).map((_, i) => <i key={i} style={{ animationDelay: i * 0.12 + 's' }} />)}

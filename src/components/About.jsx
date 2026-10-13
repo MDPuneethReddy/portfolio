@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import IdCard from './IdCard'
+import { RevealTitle } from './Reveal'
 import { person, projects, skills } from '../data'
 
 function Count({ to, suffix = '', prefix = '' }) {
@@ -29,7 +30,7 @@ export default function About() {
       <IdCard />
       <motion.div className="about-copy" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.7 }}>
         <p className="kicker">Who's this?</p>
-        <h2>I build the whole thing, from the button you click to the queue behind it.</h2>
+        <RevealTitle>I build the whole thing, from the button you click to the queue behind it.</RevealTitle>
         <p>
           I'm a full-stack engineer who started shipping in 2019. At Novartis I built GraphQL APIs, RabbitMQ
           microservices and secure data tools, and led a tooling change that cut spend by 20%. At Florida State
@@ -44,7 +45,7 @@ export default function About() {
           <div><dt>Tools in the kit</dt><dd><Count to={skills.length} /></dd></div>
           <div><dt>Spend cut at Novartis</dt><dd><Count to={20} prefix="−" suffix="%" /></dd></div>
         </dl>
-        <a className="btn btn-play" href={person.resume} target="_blank" rel="noreferrer">Download résumé</a>
+        <a className="btn btn-light" href={person.resume} target="_blank" rel="noreferrer">Download résumé</a>
       </motion.div>
     </section>
   )

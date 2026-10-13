@@ -315,8 +315,7 @@ export const certifications = [
 
 // Scenes for the "Play" trailer
 export const trailer = [
-  { image: '/media/poster.jpg', line: "Hi, I'm Puneeth — a full-stack engineer.", pos: 'center 20%' },
-  { image: '/media/beach.jpg', line: 'Based in Florida. Building since 2019.', pos: 'center 30%' },
+  { image: '/media/beach.jpg', line: "Hi, I'm Puneeth — a full-stack engineer.", pos: 'center 30%' },
   { image: '/media/hero-night.jpg', line: 'I turn ideas into fast, scalable, delightful web apps.', pos: 'center 35%' },
   { image: null, line: 'React · Node · Python · FastAPI · GraphQL · Docker · RabbitMQ', motif: 'circuit' },
   { image: null, line: 'Novartis. Florida State University. 5+ years of shipping.', motif: 'waves' },

@@ -65,7 +65,7 @@ export default function IdCard() {
   const updateStrap = () => {
     const cx = x.get()
     const cy = y.get()
-    setStrap(`M0 -220 Q ${cx * 0.35} ${(cy - 220) / 2} ${cx} ${cy}`)
+    setStrap(`M0 -130 Q ${cx * 0.35} ${(cy - 130) / 2} ${cx} ${cy}`)
   }
   useMotionValueEvent(x, 'change', updateStrap)
   useMotionValueEvent(y, 'change', updateStrap)
@@ -75,11 +75,12 @@ export default function IdCard() {
 
   return (
     <div className="idc-stage">
-      <svg className="idc-strap" viewBox="-200 -220 400 260" aria-hidden="true">
-        <path d={strap === 'M0 0 L0 0' ? 'M0 -220 L0 0' : strap} />
+      <svg className="idc-strap" viewBox="-200 -130 400 170" aria-hidden="true">
+        <path d={strap === 'M0 0 L0 0' ? 'M0 -130 L0 0' : strap} />
       </svg>
       <motion.div
         className="idc-drag"
+        data-cursor="Drag"
         drag
         dragSnapToOrigin
         dragElastic={0.35}

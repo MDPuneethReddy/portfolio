@@ -6,8 +6,9 @@ import { person } from '../data'
 // whichever section you're looking at.
 
 const sectionLines = {
+  about: ['That ID card is real. Well, the info is. Give it a swing!', 'Flip it over for the fine print.'],
   experience: ['These are my seasons. Novartis and FSU were binge-worthy. 🍿', 'Click a card to see every episode of that job.'],
-  projects: ['Hover a poster for a preview, click for the full episode!', 'Everything here is real, shipped code. Go peek on GitHub.'],
+  projects: ['Hover a title for a preview, click for the full episode!', 'Everything here is real, shipped code. Go peek on GitHub.'],
   skills: ['My toolkit. Yes, I genuinely enjoy RabbitMQ.', 'Full stack means full stack — UI to infra.'],
   education: ['Two degrees, zero regrets. Mostly.', 'Florida State and VIT shaped how I build.'],
   certifications: ['Certified — and certifiably curious.'],
@@ -46,14 +47,26 @@ export default function Buddy({ profile }) {
     setTimeout(() => setWaving(false), 1600)
   }
 
-  // Walk in, then introduce myself.
+  // Wait until the hero (which already introduces me) is scrolled away,
+  // then walk in and say hi.
+  const [entered, setEntered] = useState(false)
   useEffect(() => {
-    const a = setTimeout(() => setArrived(true), 2300)
-    const b = setTimeout(() => say(`Hey! I'm Puneeth 👋 ${profile.greeting}`), 2500)
-    const c = setTimeout(() => say('Hit ▶ Play for my 30-second trailer, or just scroll and binge.'), 9500)
-    return () => [a, b, c].forEach(clearTimeout)
+    const check = () => {
+      if (window.scrollY > window.innerHeight * 0.6) {
+        setEntered(true)
+        window.removeEventListener('scroll', check)
+      }
+    }
+    window.addEventListener('scroll', check, { passive: true })
+    return () => window.removeEventListener('scroll', check)
+  }, [])
+  useEffect(() => {
+    if (!entered) return
+    const a = setTimeout(() => setArrived(true), 2200)
+    const b = setTimeout(() => say(`Hey, mini me here 👋 ${profile.greeting}`), 2400)
+    return () => [a, b].forEach(clearTimeout)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile.id])
+  }, [entered, profile.id])
 
   // React to sections as they scroll into view.
   useEffect(() => {
@@ -61,7 +74,7 @@ export default function Buddy({ profile }) {
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting && section.current !== e.target.id) {
+          if (e.isIntersecting && section.current !== e.target.id && window.scrollY > window.innerHeight * 0.6) {
             section.current = e.target.id
             idx.current = 0
             say(sectionLines[e.target.id][0])
@@ -88,6 +101,7 @@ export default function Buddy({ profile }) {
     say(lines[idx.current])
   }
 
+  if (!entered) return null
   return (
     <div className={'buddy' + (hidden ? ' tucked' : '')}>
       <AnimatePresence>
