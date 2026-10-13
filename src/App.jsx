@@ -13,6 +13,7 @@ import PeriodicTable from './components/PeriodicTable'
 import ProjectList from './components/ProjectList'
 import DetailModal from './components/DetailModal'
 import StoryMode from './components/StoryMode'
+import ResumeViewer from './components/ResumeViewer'
 import Buddy from './components/Buddy'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -43,6 +44,12 @@ export default function App() {
   const [profile, setProfile] = useState(stored || profiles[0])
   const [detail, setDetail] = useState(null)
   const [storyAt, setStoryAt] = useState(null)
+  const [resumeOpen, setResumeOpen] = useState(false)
+  useEffect(() => {
+    const open = () => setResumeOpen(true)
+    window.addEventListener('open-resume', open)
+    return () => window.removeEventListener('open-resume', open)
+  }, [])
   const playing = storyAt !== null
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 30 })
@@ -68,8 +75,8 @@ export default function App() {
   useEffect(() => {
     const l = window.__lenis
     if (!l) return
-    detail || playing ? l.stop() : l.start()
-  }, [detail, playing])
+    detail || playing || resumeOpen ? l.stop() : l.start()
+  }, [detail, playing, resumeOpen])
 
   const finishIntro = useCallback(() => setStage((s) => (s === 'intro' ? 'profiles' : s)), [])
 
@@ -127,6 +134,7 @@ export default function App() {
 
       <AnimatePresence>
         {detail && <DetailModal key="detail" item={detail} onClose={closeDetail} />}
+        {resumeOpen && <ResumeViewer key="resume" onClose={() => setResumeOpen(false)} />}
         {playing && <StoryMode key="story" profile={profile} start={storyAt} onClose={closeStory} />}
       </AnimatePresence>
       <span hidden>{person.name}</span>

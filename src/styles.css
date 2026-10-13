@@ -657,3 +657,22 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
 }
+
+/* ---------- Résumé viewer ---------- */
+.rv { position: fixed; inset: 0; z-index: 96; background: rgba(5,5,6,.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); overflow-y: auto; overscroll-behavior: contain; }
+.rv-bar {
+  position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px var(--gutter); background: rgba(11,11,12,.9); border-bottom: 1px solid var(--line);
+}
+.rv-title { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.rv-title .p-mark { font-size: 34px; }
+.rv-title div { display: flex; flex-direction: column; min-width: 0; }
+.rv-title b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rv-title span { font-family: var(--mono); font-size: 11px; color: var(--mute); }
+.rv-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+.rv-actions .btn { padding: .65em 1.2em; font-size: 14px; }
+.rv-close { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; border: 1px solid var(--line); }
+.rv-close:hover { border-color: var(--fg); }
+.rv-pages { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 28px 16px 60px; }
+.rv-page { width: min(860px, 100%); height: auto; border-radius: 6px; box-shadow: 0 30px 80px rgba(0,0,0,.6); background: #fff; }
+@media (max-width: 600px) { .hide-xs { display: none; } .rv-title b { font-size: 14px; } }

@@ -2,6 +2,7 @@ import React from 'react'
 import { FaLinkedin, FaGithub } from 'react-icons/fa'
 import { person } from '../data'
 import { scrollTo } from './Navbar'
+import { openResume } from './ResumeViewer'
 
 export default function Footer() {
   return (
@@ -15,7 +16,7 @@ export default function Footer() {
         <button onClick={() => scrollTo('projects')}>Projects</button>
         <button onClick={() => scrollTo('skills')}>Skills</button>
         <button onClick={() => scrollTo('contact')}>Contact</button>
-        <a href={person.resume} target="_blank" rel="noreferrer">Resume</a>
+        <button onClick={openResume}>Résumé</button>
         <a href={person.blog} target="_blank" rel="noreferrer">Blog</a>
         <a href={`mailto:${person.email}`}>Email</a>
         <a href={person.github} target="_blank" rel="noreferrer">Source</a>

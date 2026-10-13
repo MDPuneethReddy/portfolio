@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import IdCard from './IdCard'
 import { RevealTitle } from './Reveal'
+import { openResume } from './ResumeViewer'
 import { person, skills } from '../data'
 
 function Count({ to, suffix = '', prefix = '' }) {
@@ -47,7 +48,7 @@ export default function About() {
           <div><dt>Tools in the kit</dt><dd><Count to={skills.length} /></dd></div>
           <div><dt>Pipeline throughput</dt><dd><Count to={3} suffix="×" /></dd></div>
         </dl>
-        <a className="btn btn-light" href={person.resume} target="_blank" rel="noreferrer">Download résumé</a>
+        <button className="btn btn-light" onClick={openResume}>View résumé</button>
       </motion.div>
     </section>
   )

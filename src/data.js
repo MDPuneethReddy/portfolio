@@ -11,6 +11,7 @@ export const person = {
   github: 'https://github.com/MDPuneethReddy',
   blog: 'https://blog.mdpuneethreddy.com',
   resume: '/assets/Resume.pdf',
+  resumePages: ['/media/resume-1.jpg'], // rendered pages for the in-page viewer
   // Swap these files in public/media/ to change photos across the site.
   photo: '/media/face.jpg', // mini-me head (square)
   heroCutout: '/media/hero-cutout.webp', // hero portrait, transparent background

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FiChevronDown, FiMenu, FiX } from 'react-icons/fi'
 import { person, profiles } from '../data'
 import Avatar from './Avatar'
+import { openResume } from './ResumeViewer'
 
 const links = [
   ['about', 'About'],
@@ -62,6 +63,7 @@ export default function Navbar({ profile, onSwitch }) {
         {links.map(([id, label]) => (
           <button key={id} onClick={() => go(id)} className={active === id ? 'on' : ''}>{label}</button>
         ))}
+        <button onClick={() => { setOpen(false); openResume() }}>Résumé</button>
         <a href={person.blog} target="_blank" rel="noreferrer">Blog ↗</a>
       </nav>
       <div className="nav-right">
