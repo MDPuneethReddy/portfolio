@@ -368,6 +368,49 @@ def classify(page: Page, queue_patterns: list[str], blocked_patterns: list[str],
     return "open"
 
 
+SECURITY_MARKERS = {
+    "waiting_room_cookie": r"incap_wrt",
+    "reese84": r"reese84",
+    "captcha": r"hcaptcha|recaptcha|px-captcha|captcha-delivery",
+    "waiting_room_text": r"waiting ?room|you are (?:now )?in line",
+}
+
+
+def security_fingerprint(page: Page) -> dict:
+    """The parts of a bot-protection response that stay the same between requests.
+
+    Pokémon Center's Imperva layer answers a blocked visitor with the same
+    challenge script, protection codes and cookie types every time. Trackers
+    report that the site's "security changes" shortly before a drop, so a
+    change here is an early hint even when the real page can't be seen.
+    """
+    cookies = sorted({
+        re.sub(r"_\d+_(\d+)$", r"_*_\1", m.group(1))  # incap_ses_1008_2682446 -> incap_ses_*_2682446
+        for m in re.finditer(r"(?im)^set-cookie:\s*([^=;\s]+)=", page.headers)
+    })
+    scripts = sorted({src.split("?")[0] for src in re.findall(r'<script[^>]*\bsrc="([^"]+)"', page.body, re.I)})
+    iinfo = re.search(r"(?im)^x-iinfo:\s*(.+)$", page.headers)
+    fp = {
+        "status": page.status,
+        "cookies": cookies,
+        "scripts": scripts[:20],
+        "iinfo": " ".join(re.findall(r"(?<!\S)(?:\d[A-Z]{3}|B\d+\([^)]*\)|U\d+)(?=\s|$)", iinfo.group(1))) if iinfo else "",
+    }
+    for key in ("SWUDNSAI", "edet", "cinfo", "rpinfo"):
+        m = re.search(rf"[?&]{key}=([^&\"]+)", page.body)
+        fp[key] = m.group(1) if m else ""
+    hay = page.headers + page.body
+    for key, pat in SECURITY_MARKERS.items():
+        fp[key] = bool(re.search(pat, hay, re.I))
+    return fp
+
+
+def fingerprint_diff(old: dict, new: dict) -> str:
+    return "; ".join(
+        f"{k}: {old.get(k)!r} -> {new.get(k)!r}" for k in sorted(set(old) | set(new)) if old.get(k) != new.get(k)
+    )
+
+
 def queueit_integrations(customer: str) -> tuple[list[dict] | None, str | None]:
     """Read a retailer's public Queue-it client config.
 
@@ -579,11 +622,14 @@ class Watcher:
             url = site.get("open_url", site["url"])
             if status == "queue":
                 detail = f"Redirected to {page.url}" if page.url != site["url"] else ""
+            if site.get("security_watch") and not page.error:
+                self.check_security(site, st, security_fingerprint(page), url)
 
         if status in ("blocked", "error"):
             limit = self.config.get("blind_alert_after", 6)
             st["blocked_streak"] = min(st.get("blocked_streak", 0) + 1, limit + 1)
-            if st["blocked_streak"] == limit:
+            # A security-watched site is expected to block us; its fingerprint is the signal.
+            if st["blocked_streak"] == limit and not (site.get("security_watch") and status == "blocked"):
                 self.record("blind", f"{name} has been {status} for {limit} checks in a row")
                 self.notify(
                     f"Can't see {name}",
@@ -615,6 +661,32 @@ class Watcher:
                         url=url, priority=3, tags=["checkered_flag"])
         elif status != prev:
             st["status"], st["since"] = status, iso(now_utc())
+
+    def check_security(self, site: dict, st: dict, fp: dict, url: str) -> None:
+        """Alert when the bot-protection fingerprint changes (seen twice in a row)."""
+        name = site["name"]
+        sig = hashlib.sha1(json.dumps(fp, sort_keys=True).encode()).hexdigest()[:12]
+        if "fp" not in st:
+            st["fp"], st["fp_sig"] = fp, sig
+            self.record("security_baseline", f"{name} security fingerprint recorded ({sig})")
+            return
+        if sig == st["fp_sig"]:
+            st.pop("fp_pending", None)
+            return
+        if st.get("fp_pending") != sig:
+            st["fp_pending"] = sig  # wait for a second sighting so one odd response doesn't alert
+            print(f"[security] {name}: new fingerprint {sig}, waiting to confirm")
+            return
+        diff = fingerprint_diff(st["fp"], fp)
+        st["fp"], st["fp_sig"] = fp, sig
+        st.pop("fp_pending", None)
+        self.record("security_change", f"{name} security changed: {diff}")
+        self.notify(
+            f"{name} security changed",
+            "The site's bot protection just changed. Trackers treat this as an early sign a "
+            "queue/drop may be coming (sometimes it's only maintenance). Be ready to join.\n" + diff[:300],
+            url=url, priority=4, tags=["shield"],
+        )
 
     # ---- drawings / raffles
 

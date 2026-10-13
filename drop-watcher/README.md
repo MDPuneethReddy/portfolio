@@ -8,6 +8,9 @@ Pushes a phone alert when:
   spotted, with the start time and items, and a reminder **5 minutes before it opens**.
   You get about an hour to enter, so you don't need to be first. Change the timing
   with `reminder_minutes` and `remind_at_open` in `config.toml`.
+- **Pokémon Center's security changes** (early warning, experimental): drop trackers
+  report the site tightens its bot protection shortly before a drop, so you get a
+  heads-up when that protection layer changes, even from a server that is blocked.
 
 Everything is in `config.toml`: sites, keywords, reminder times, time zones.
 Plain Python 3.11+, no packages needed.
@@ -42,10 +45,11 @@ python3 drop-watcher/drop_watcher.py --loop           # queues every ~1 min, dra
 
 Pokémon Center (Imperva) and Sam's Club ("Robot or human?") block cloud
 servers, including GitHub Actions. They usually allow a home internet
-connection. The GitHub workflow skips these two (`skip_in_ci = true`), so a
-good split is:
+connection. On a server, Pokémon Center still gets the security-change early
+warning, but only a home connection sees its queue itself. The GitHub workflow
+skips Sam's Club (`skip_in_ci = true`), so a good split is:
 
-- **GitHub:** Walmart and Target drawings, plus Costco.
+- **GitHub / server:** Walmart and Target drawings, Costco, Pokémon Center security changes.
 - **Home:** `python3 drop-watcher/drop_watcher.py --loop --only "Pokémon Center" --only "Sam's Club"`
 
 If a site is still blocked, try `--browser` (`pip install playwright && playwright install chromium`).
@@ -56,7 +60,8 @@ so a blocked site doesn't fail silently.
 
 | Site | How | Notes |
 |---|---|---|
-| Pokémon Center | Homepage redirects to a waiting room, or the page shows waiting-room or "high traffic" text | Needs a home IP |
+| Pokémon Center queue | Homepage redirects to a waiting room, or the page shows waiting-room or "high traffic" text | Needs a home IP |
+| Pokémon Center security | The bot-protection response a blocked visitor gets (challenge script, Imperva codes, cookie types, waiting-room/captcha markers) is the same on every request. A change seen on 2 checks in a row triggers an alert. | Works from anywhere. Experimental: sometimes it's only maintenance. `history` in `state.json` records every change, so you can see whether it predicts queues. |
 | Costco | Costco's public Queue-it config (`assets.queue-it.net/costco/...`) lists no queues normally and gains one when a queue is set up | Often fires before the queue opens; works from anywhere |
 | Sam's Club | Redirect to queue-it.net or waiting-room text | Needs a home IP |
 | Walmart drawing | Walmart's drawing page (`walmart.com/shop/collectibles/draw`) lists each item as "Drawing starts Oct 14, 2:00pm PDT". Alerts name the Pokémon items. | Hip2Save's "Walmart Drawing" post is a backup source. |

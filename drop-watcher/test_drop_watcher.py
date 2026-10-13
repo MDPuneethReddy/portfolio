@@ -168,5 +168,54 @@ class Reminders(unittest.TestCase):
         self.assertEqual([t for t, _ in self.discord.sent], ["Costco queue is LIVE", "Costco queue ended"])
 
 
+INCAP_HEADERS = (
+    "X-Iinfo: 36-50406046-0 0NNN RT(1791899467045 80) q(0 -1 -1 6) r(0 -1) B12(11,2262164,0) U24\n"
+    "Set-Cookie: visid_incap_2682446=abc; path=/\nSet-Cookie: incap_ses_{pop}_2682446=def; path=/\n"
+)
+INCAP_BODY = ('<script src="{script}" async></script><iframe src="/_Incapsula_Resource?SWUDNSAI=31'
+              '&xinfo=1&incident_id={pop}&edet=12&cinfo=0b000000&rpinfo=0&mth=GET">Request unsuccessful. '
+              'Incapsula incident ID: {pop}</iframe>')
+
+
+def incap_page(pop="1008", script="/vice-come-Soldenyson"):
+    return d.Page(200, "https://www.pokemoncenter.com/", INCAP_HEADERS.format(pop=pop),
+                  INCAP_BODY.format(pop=pop, script=script))
+
+
+class SecurityWatch(unittest.TestCase):
+    site = {"name": "Pokémon Center", "url": "https://www.pokemoncenter.com/", "security_watch": True}
+
+    def setUp(self):
+        self.out = Recorder("discord", False)
+        self.w = d.Watcher({"blind_alert_after": 2}, {"sites": {}, "events": {}, "history": []}, [self.out])
+
+    def run_with(self, page):
+        with mock.patch.object(d, "fetch", return_value=page):
+            self.w.check_queue_site(self.site)
+
+    def test_fingerprint_ignores_per_request_noise(self):
+        a, b = d.security_fingerprint(incap_page("1008")), d.security_fingerprint(incap_page("1018"))
+        self.assertEqual(a, b)
+        self.assertEqual(a["iinfo"], "0NNN B12(11,2262164,0) U24")
+
+    def test_change_alerts_after_second_sighting_and_no_blind_alert(self):
+        for _ in range(4):
+            self.run_with(incap_page())
+        self.assertEqual(self.out.sent, [])  # blocked is expected; no "Can't see" alert
+        self.run_with(incap_page(script="/new-challenge-script"))
+        self.assertEqual(self.out.sent, [])  # one odd response isn't enough
+        self.run_with(incap_page(script="/new-challenge-script"))
+        self.assertEqual([t for t, _ in self.out.sent], ["Pokémon Center security changed"])
+        self.run_with(incap_page(script="/new-challenge-script"))
+        self.assertEqual(len(self.out.sent), 1)
+
+    def test_single_blip_is_ignored(self):
+        self.run_with(incap_page())
+        self.run_with(incap_page(script="/blip"))
+        self.run_with(incap_page())
+        self.run_with(incap_page(script="/blip"))
+        self.assertEqual(self.out.sent, [])
+
+
 if __name__ == "__main__":
     unittest.main()

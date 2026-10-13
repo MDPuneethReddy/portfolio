@@ -32,11 +32,13 @@ blind_alert_after = 6
 # --------------------------------------------------------------------------
 
 # Pokémon Center's waiting room sits behind Imperva/Incapsula, which blocks
-# datacenter IPs. Expect "blocked" from GitHub Actions; run from home for this one.
+# datacenter IPs. From a server we usually get the block page, but
+# `security_watch` still alerts when that protection layer changes, which
+# trackers treat as an early sign of a drop. From home it also sees the queue.
 [[queue_sites]]
 name = "Pokémon Center"
 url = "https://www.pokemoncenter.com/"
-skip_in_ci = true
+security_watch = true
 queue_patterns = ["high (?:volume of )?(?:traffic|demand)"]
 
 # Costco runs its queue on Queue-it. Its public config lists no integrations
