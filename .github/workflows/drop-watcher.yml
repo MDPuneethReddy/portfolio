@@ -1,0 +1,55 @@
+name: Drop watcher
+
+on:
+  schedule:
+    - cron: "*/5 * * * *" # GitHub may run this a few minutes late under load
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: drop-watcher
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # State (detected drawings, queue status, history) lives on its own
+      # branch so these updates never touch the portfolio's main branch.
+      - name: Load saved state
+        run: |
+          if git fetch --depth=1 origin drop-watcher-data; then
+            git worktree add data FETCH_HEAD
+          else
+            git worktree add --detach data
+            git -C data checkout --orphan drop-watcher-data
+            git -C data rm -rqf .
+          fi
+
+      - name: Check queues and drawings
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python drop-watcher/drop_watcher.py --state data/state.json
+
+      - name: Save state
+        if: always()
+        run: |
+          cd data
+          [ -f state.json ] || exit 0
+          git add state.json
+          git diff --cached --quiet && exit 0
+          git -c user.name="drop-watcher" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -qm "Update drop watcher state"
+          git push origin HEAD:drop-watcher-data

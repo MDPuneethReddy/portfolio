@@ -1,0 +1,83 @@
+# Drop watcher settings. Patterns are case-insensitive regular expressions and
+# are added to the built-in defaults in drop_watcher.py.
+
+# How often `--loop` checks, in seconds (±20% jitter). GitHub Actions uses its own cron.
+interval_seconds = 300
+
+# Times in alerts are shown in these zones; the first one is the "main" one.
+display_timezones = ["America/New_York", "America/Los_Angeles"]
+
+# Reminders before a drawing opens, in minutes. An "it's open" alert at the
+# start time is always sent too.
+reminder_minutes = [60, 15]
+
+# Drawings give you about an hour to enter.
+entry_window_minutes = 60
+
+# Ignore start times further out than this.
+max_days_ahead = 45
+
+# After this many blocked/failed checks in a row, send one "can't see this site" warning.
+blind_alert_after = 6
+
+# --------------------------------------------------------------------------
+# Queue watch: alert as soon as a waiting room / virtual queue appears.
+# Add `fetch = "browser"` to a site to load it in headless Chromium.
+# `skip_in_ci = true` skips a site on GitHub Actions (its IPs get blocked).
+# --------------------------------------------------------------------------
+
+# Pokémon Center's waiting room sits behind Imperva/Incapsula, which blocks
+# datacenter IPs. Expect "blocked" from GitHub Actions; run from home for this one.
+[[queue_sites]]
+name = "Pokémon Center"
+url = "https://www.pokemoncenter.com/"
+skip_in_ci = true
+queue_patterns = ["high (?:volume of )?(?:traffic|demand)"]
+
+# Costco runs its queue on Queue-it. Its public config lists no integrations
+# until a queue is set up, which often happens before the queue opens. It is a CDN file, not behind the bot wall.
+[[queue_sites]]
+name = "Costco"
+type = "queueit"
+customer = "costco"
+open_url = "https://www.costco.com/"
+
+# Sam's Club blocks datacenter IPs with a "Robot or human?" page; works best from home.
+[[queue_sites]]
+name = "Sam's Club"
+url = "https://www.samsclub.com/"
+skip_in_ci = true
+
+# --------------------------------------------------------------------------
+# Drawing (raffle) watch: read announcement pages, pull out "<Month> <day> ...
+# <time> <zone>" start times near the keywords, and schedule reminders.
+# `open_url` is the page the alert links to (where you actually enter).
+# --------------------------------------------------------------------------
+
+[[announcement_sources]]
+name = "Hip2Save Walmart drawing post"
+retailer = "Walmart"
+label = "drawing"
+url = "https://hip2save.com/deals/walmart-draw/"
+open_url = "https://www.walmart.com/"
+keywords = ["drawing", "pokémon", "pokemon", "entry", "enter"]
+stop_at = "Join The Discussion"  # ignore timestamps in reader comments
+
+[[announcement_sources]]
+name = "TrackaLacker Target drawing news"
+retailer = "Target"
+label = "drawing"
+url = "https://www.trackalacker.com/articles/news/target-drawing-system"
+open_url = "https://www.target.com/"
+keywords = ["drawing", "raffle", "pokémon", "pokemon"]
+
+# Walmart's own Collectibles Drawing page blocks datacenter IPs (GitHub
+# Actions), but usually works from a home connection. Paste its URL and
+# enable this when running locally.
+[[announcement_sources]]
+enabled = false
+name = "Walmart Collectibles Drawing page"
+retailer = "Walmart"
+label = "drawing"
+url = "https://www.walmart.com/REPLACE-WITH-DRAWING-PAGE"
+keywords = ["drawing", "entry", "enter"]
